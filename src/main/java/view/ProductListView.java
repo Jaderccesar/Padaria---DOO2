@@ -12,47 +12,49 @@ import model.Product;
 
 /**
  *
- * @author Daniel Coelho - PAD 1 e 2 - New - "Adicionado o CRUD de um PRODUTO" - Sprint 1
+ * @author Daniel Coelho - PAD 1 e 2 - New - "Adicionado o CRUD de um PRODUTO" -
+ * Sprint 1
  */
 public class ProductListView extends javax.swing.JFrame {
-    
+
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(ProductListView.class.getName());
     private final ProductController productController = new ProductController();
-    
+
     /**
      * Creates new form ProductListView
      */
     public ProductListView() {
         initComponents();
         loadProducts();
-        
-        tProduto.addMouseListener(new java.awt.event.MouseAdapter() {
-            
-        @Override
-        public void mouseClicked(java.awt.event.MouseEvent evt) {
-            int column = tProduto.columnAtPoint(evt.getPoint());
-            int row = tProduto.rowAtPoint(evt.getPoint());
 
-            if (column == 0) { 
-                editProduct(row);
+        tProduto.addMouseListener(new java.awt.event.MouseAdapter() {
+
+            @Override
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                int column = tProduto.columnAtPoint(evt.getPoint());
+                int row = tProduto.rowAtPoint(evt.getPoint());
+
+                if (column == 0) {
+                    editProduct(row);
+                }
             }
-        }});
+        });
     }
-    
+
     private void editProduct(int rowIndex) {
-        
+
         try {
 
-        int productId = (int) tProduto.getValueAt(rowIndex, 1); 
-           
-        Product productToEdit = productController.findById(productId); 
-        
-        if (productToEdit != null) {
-            new ProductView(productToEdit).setVisible(true);
-        } else {
-            JOptionPane.showMessageDialog(this, "Erro: Produto com ID " + productId + " não encontrado.", "Erro de Busca", JOptionPane.ERROR_MESSAGE);
-        }
-        
+            int productId = (int) tProduto.getValueAt(rowIndex, 1);
+
+            Product productToEdit = productController.findById(productId);
+
+            if (productToEdit != null) {
+                new ProductView(productToEdit).setVisible(true);
+            } else {
+                JOptionPane.showMessageDialog(this, "Erro: Produto com ID " + productId + " não encontrado.", "Erro de Busca", JOptionPane.ERROR_MESSAGE);
+            }
+
         } catch (ClassCastException e) {
             JOptionPane.showMessageDialog(this, "Erro interno: ID da tabela não é um número válido. " + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         } catch (RuntimeException e) {
@@ -217,61 +219,60 @@ public class ProductListView extends javax.swing.JFrame {
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-         
+
         java.awt.EventQueue.invokeLater(() -> new ProductListView().setVisible(true));
-        
+
     }
-    
+
     private void loadProducts() {
-       
+
         createTable(productController.findAll());
-                
-    } 
-    
-    
+
+    }
+
     private void filterProducts() {
-        
+
         String tipoSelecionado = (String) cmbTipo.getSelectedItem();
         int codFilter = 0;
-             
-        try{
-            
-            if (! ftfCodigo.getText().isEmpty()){
+
+        try {
+
+            if (!ftfCodigo.getText().isEmpty()) {
                 codFilter = Integer.parseInt(ftfCodigo.getText());
             }
-            
-            if (tipoSelecionado.equals("Todos")){
+
+            if (tipoSelecionado.equals("Todos")) {
                 tipoSelecionado = "";
             }
-              
+
             createTable(productController.filterProducts(codFilter, ftfNome.getText(), tipoSelecionado));
-            
+
         } catch (NumberFormatException e) {
-            
+
             JOptionPane.showMessageDialog(this, "Erro: Certifique-se de que código, é um número válido.", "Erro de Entrada", JOptionPane.ERROR_MESSAGE);
 
-        } 
-        
+        }
+
     }
-    
-    private void createTable(List<Product> listProducts){
-    
+
+    private void createTable(List<Product> listProducts) {
+
         DefaultTableModel modelo = (DefaultTableModel) tProduto.getModel();
         modelo.setRowCount(0);
-       
+
         for (Product product : listProducts) {
-            modelo.addRow(new Object[] {
+            modelo.addRow(new Object[]{
                 "Editar",
                 product.getId(),
                 product.getName(),
                 product.getType(),
                 product.getPrice(),
                 product.getStockQuantity(),
-                product.getPointCost() 
+                product.getPointCost()
             });
-        } 
+        }
     }
-    
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox<String> cmbTipo;

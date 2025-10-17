@@ -6,6 +6,7 @@ package controller;
 
 import dao.SellDAO;
 import java.util.List;
+import model.Product;
 import model.Sell;
 
 /**
@@ -39,6 +40,14 @@ public class SellController {
         }
         sellDAO.update(sell, id);
     }
+    
+   public List<Product> findProductsBySellId(int sellId) {
+    try {
+        return sellDAO.findProductsBySellId(sellId);
+    } catch (Exception e) {
+        throw new RuntimeException("Falha ao buscar produtos da venda.", e);
+    }
+}
 
     public List<Sell> findAll() {
         try {
@@ -56,16 +65,12 @@ public class SellController {
         }
     }
 
-    public List<Sell> filterSells(Integer id, String clientName) {
-        Integer idFilter = (id != null && id > 0) ? id : null;
-        String nameFilter = (clientName != null && !clientName.trim().isEmpty()) ? clientName.trim() : null;
-        String startDate = null;
-        String endDate = null;
-
-        if (idFilter == null && nameFilter == null && startDate == null) {
+    public List<Sell> filterSells(int id, String name, String cpf) {
+        
+        if(id > 0 || !name.isEmpty() || !cpf.isEmpty()){
+            return sellDAO.filter(id, name, cpf);
+        } else {
             return findAll();
         }
-
-        return sellDAO.filter(idFilter, nameFilter, startDate, endDate);
     }
 }

@@ -4,17 +4,13 @@
  */
 package dao;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import model.Client;
 import model.Sell;
 import model.Product;
-import util.ConnectionFactory;
 
 /**
  *
@@ -44,11 +40,54 @@ public class SellDAO extends AbstractDAO<Sell, Integer> {
                 stmt.setDouble(4, product.getPrice());
             }, "SellDAO", "saveProduct");
         }
-        
+
         applyLoyaltyPoints(sell);
 
         return generatedId;
     }
+    
+    public List<Product> findProductsBySellId(int sellId) {
+    String sql = """
+        SELECT 
+            p.id AS product_id,
+            p.name AS product_name,
+            p.price AS product_price,
+            p.type AS product_type,
+            p.stock_quantity AS product_stock_quantity,
+            p.point_cost AS product_point_cost,
+            sp.quantity AS quantity,
+            sp.price AS sell_price
+        FROM sell_product sp
+        JOIN product p ON p.id = sp.product_id
+        WHERE sp.sell_id = ?
+        ORDER BY p.name
+    """;
+
+    return executeQuery(sql,
+        stmt -> {
+            stmt.setInt(1, sellId);
+        },
+        rs -> {
+            List<Product> products = new ArrayList<>();
+            while (rs.next()) {
+                Product product = new Product();
+                product.setId(rs.getInt("product_id"));
+                product.setName(rs.getString("product_name"));
+                product.setPrice(rs.getDouble("product_price"));
+                product.setType(rs.getString("product_type"));
+                product.setStockQuantity(rs.getInt("product_stock_quantity"));
+                product.setPointCost(rs.getInt("product_point_cost"));
+                product.setStockQuantity((product.getStockQuantity() - rs.getInt("quantity")));
+
+                products.add(product);
+            }
+            return products;
+        },
+        "SellDAO",
+        "findProductsBySellId"
+    );
+}
+
 
     @Override
     public Sell findById(Integer id) {
@@ -63,7 +102,7 @@ public class SellDAO extends AbstractDAO<Sell, Integer> {
 
     @Override
     public List<Sell> findAll() {
-        String sql = "SELECT * FROM sell ORDER BY id";
+        String sql = "SELECT s.id AS sell_id, s.sell_date, s.total, s.price, c.id AS client_id, c.name AS client_name, c.cpf AS client_cpf, c.phone AS client_phone, c.total_points AS client_points  FROM sell s JOIN client c ON c.id = s.client_id order by s.id";
         return executeQuery(sql, stmt -> {
         }, result -> {
             List<Sell> sells = new ArrayList<>();
@@ -94,98 +133,77 @@ public class SellDAO extends AbstractDAO<Sell, Integer> {
 
     private Sell mapResultSetToSell(ResultSet rs) throws SQLException {
         Sell sell = new Sell();
-        sell.setId(rs.getInt("id"));
-        sell.setSellDate(rs.getTimestamp("sell_date"));
+
+        sell.setId(rs.getInt("sell_id"));
+        sell.setSellDate(rs.getDate("sell_date"));
         sell.setTotal(rs.getDouble("total"));
         sell.setPrice(rs.getDouble("price"));
 
-        String sqlProducts = "SELECT p.*, sp.quantity FROM product p "
-                + "JOIN sell_product sp ON p.id = sp.product_id "
-                + "WHERE sp.sell_id = ?";
-        List<Product> products = executeQuery(sqlProducts, stmt -> stmt.setInt(1, sell.getId()), result -> {
-            List<Product> list = new ArrayList<>();
-            while (result.next()) {
-                Product p = new Product();
-                p.setId(result.getInt("id"));
-                p.setName(result.getString("name"));
-                p.setPrice(result.getDouble("price"));
-                list.add(p);
-            }
-            return list;
-        }, "SellDAO", "mapProducts");
+        Client client = new Client();
+        client.setId(rs.getInt("client_id"));
+        client.setName(rs.getString("client_name"));
+        client.setCpf(rs.getString("client_cpf"));
+        client.setPhone(rs.getString("client_phone"));
+        client.setTotalPoints(rs.getInt("client_points"));
 
-        sell.setProducts((ArrayList<Product>) products);
+        sell.setClient(client);
+
         return sell;
     }
 
-    public List<Sell> filter(Integer id, String clientName, String dateStart, String dateEnd) {
-        List<Sell> sells = new ArrayList<>();
-        List<Object> params = new ArrayList<>();
+    public List<Sell> filter(int id, String name, String cpf) {
+
+        List<Object> parameters = new ArrayList<>();
 
         StringBuilder sql = new StringBuilder(
-                "SELECT s.*, c.name AS client_name "
-                + "FROM sell s "
-                + "JOIN client c ON s.client_id = c.id "
-                + "WHERE 1=1"
-        );
+                "SELECT s.id AS sell_id, s.sell_date, s.total, s.price, c.id AS client_id, c.name AS client_name, c.cpf AS client_cpf, c.phone AS client_phone, c.total_points AS client_points FROM sell s JOIN client c ON c.id = s.client_id WHERE 1=1");
 
-        if (id != null) {
+        if (id > 0) {
             sql.append(" AND s.id = ?");
-            params.add(id);
+            parameters.add(id);
         }
-        if (clientName != null) {
+
+        if (name != null && !name.trim().isEmpty()) {
             sql.append(" AND c.name ILIKE ?");
-            params.add("%" + clientName + "%");
+            parameters.add("%" + name + "%");
         }
-        if (dateStart != null) {
-            sql.append(" AND s.sell_date >= ?");
-            params.add(Timestamp.valueOf(dateStart));
-        }
-        if (dateEnd != null) {
-            sql.append(" AND s.sell_date <= ?");
-            params.add(Timestamp.valueOf(dateEnd));
+
+        if (cpf != null && !cpf.trim().isEmpty()) {
+            sql.append(" AND c.cpf ILIKE ?");
+            parameters.add("%" + cpf + "%");
         }
 
         sql.append(" ORDER BY s.id");
 
-        try (Connection conn = ConnectionFactory.getConnection(); PreparedStatement ps = conn.prepareStatement(sql.toString())) {
-
-            for (int i = 0; i < params.size(); i++) {
-                Object param = params.get(i);
-                if (param instanceof String) {
-                    ps.setString(i + 1, (String) param);
-                } else if (param instanceof Integer) {
-                    ps.setInt(i + 1, (Integer) param);
-                } else if (param instanceof Timestamp) {
-                    ps.setTimestamp(i + 1, (Timestamp) param);
-                }
+        return executeQuery(sql.toString(), stmt -> {
+            int i = 1;
+            for (Object param : parameters) {
+                setStatementParameter(stmt, i++, param);
             }
-
-            ResultSet rs = ps.executeQuery();
-            while (rs.next()) {
-                sells.add(mapResultSetToSell(rs));
+        }, result -> {
+            List<Sell> sells = new ArrayList<>();
+            while (result.next()) {
+                sells.add(mapResultSetToSell(result));
             }
+            return sells;
+        }, "SellDAO", "filter");
+    }
 
-        } catch (SQLException e) {
-            throw new RuntimeException("Erro ao filtrar vendas: " + e.getMessage(), e);
+    private void applyLoyaltyPoints(Sell sell) {
+        if (sell == null || sell.getClient() == null) {
+            return;
         }
 
-        return sells;
+        int earnedPoints = (int) (sell.getTotal() / 10);
+
+        if (earnedPoints > 0) {
+            Client client = sell.getClient();
+            int currentPoints = client.getTotalPoints() != null ? client.getTotalPoints() : 0;
+            client.setTotalPoints(currentPoints + earnedPoints);
+
+            ClientDAO clientDAO = new ClientDAO();
+            clientDAO.updateTotalPoints(client);
+        }
     }
-    
-    private void applyLoyaltyPoints(Sell sell) {
-    if (sell == null || sell.getClient() == null) return;
 
-    int earnedPoints = (int) (sell.getTotal() / 10);
-
-    if (earnedPoints > 0) {
-        Client client = sell.getClient();
-        int currentPoints = client.getTotalPoints() != null ? client.getTotalPoints() : 0;
-        client.setTotalPoints(currentPoints + earnedPoints);
-
-        ClientDAO clientDAO = new ClientDAO();
-        clientDAO.updateTotalPoints(client);
-    }
-   }
-    
 }

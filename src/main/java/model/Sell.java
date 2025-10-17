@@ -110,7 +110,5 @@ public class Sell {
 
     total -= discount;
     client.setTotalPoints(availablePoints - pointsToUse);
-}
-
-    
+    }
 }

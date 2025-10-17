@@ -4,52 +4,19 @@
  */
 package view;
 
-import controller.ClientController;
-import controller.ProductController;
-import controller.SellController;
-import java.util.List;
-import model.Client;
-import model.Product;
-import model.Sell;
-
 /**
  *
  * @author Usuario
  */
 public class SellView extends javax.swing.JFrame {
-
+    
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(SellView.class.getName());
-
-    private final SellController sellController = new SellController();
-    private final ClientController clientController = new ClientController();
-    private final ProductController productController = new ProductController();
-
-    private Sell currentSell;
 
     /**
      * Creates new form SellView
      */
-    /*public SellView() {
+    public SellView() {
         initComponents();
-        setTitle("Nova Venda");
-        loadClients();
-        loadProducts();
-    }
-
-    private void loadClients() {
-        List<Client> clients = clientController.findAll();
-        cbCliente.removeAllItems();
-        for (Client c : clients) {
-            cbCliente.addItem(c.getName());
-        }
-    }
-
-    private void loadProducts() {
-        List<Product> products = productController.findAll();
-        cbProduto.removeAllItems();
-        for (Product p : products) {
-            cbProduto.addItem(p.getName());
-        }
     }
 
     /**
@@ -61,17 +28,35 @@ public class SellView extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        tfCPF = new javax.swing.JTextField();
+
+        jLabel1.setText("jLabel1");
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        jLabel2.setText("CPF");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(32, 32, 32)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel2)
+                    .addComponent(tfCPF, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(747, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(44, 44, 44)
+                .addComponent(jLabel2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(tfCPF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(452, Short.MAX_VALUE))
         );
 
         pack();
@@ -103,5 +88,8 @@ public class SellView extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JTextField tfCPF;
     // End of variables declaration//GEN-END:variables
 }
