@@ -133,4 +133,19 @@ public class ClientController {
             throw new RuntimeException("Erro ao excluir cliente. Detalhes no console.", e);
         }
     }
+    
+    public Client findByCpf(String cpf) {
+        try {
+            List<Client> clients = clientDAO.filter(0, null, cpf);
+            if (!clients.isEmpty()) {
+                return clients.get(0);
+            } else {
+                return null; 
+            }
+        } catch (Exception e) {
+            loggerDAO.salvarLog(usuario, class_name, "findByCpf", "Falha ao buscar cliente com CPF: " + cpf, null);
+            throw new RuntimeException("Falha ao localizar cliente pelo CPF no banco.", e);
+        }
+    }
+
 }

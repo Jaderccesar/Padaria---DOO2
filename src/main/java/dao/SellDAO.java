@@ -8,6 +8,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 import model.Client;
 import model.Sell;
 import model.Product;
@@ -189,12 +190,12 @@ public class SellDAO extends AbstractDAO<Sell, Integer> {
         }, "SellDAO", "filter");
     }
 
-    private void applyLoyaltyPoints(Sell sell) {
+    public void applyLoyaltyPoints(Sell sell) {
         if (sell == null || sell.getClient() == null) {
             return;
         }
 
-        int earnedPoints = (int) (sell.getTotal() / 10);
+        int earnedPoints = (int) (sell.getTotal() / 10) / 2;
 
         if (earnedPoints > 0) {
             Client client = sell.getClient();
@@ -205,5 +206,92 @@ public class SellDAO extends AbstractDAO<Sell, Integer> {
             clientDAO.updateTotalPoints(client);
         }
     }
+    
+    public void addProductToSell(int sellId, int productId, int quantity, double price) {
+        if (sellId <= 0 || productId <= 0 || quantity <= 0 || price < 0) {
+            throw new IllegalArgumentException("Venda, produto, quantidade e preço devem ser válidos.");
+        }
 
+        String sql = "INSERT INTO sell_product (sell_id, product_id, quantity, price) VALUES (?, ?, ?, ?)";
+
+        executeUpdate(sql, stmt -> {
+            stmt.setInt(1, sellId);
+            stmt.setInt(2, productId);
+            stmt.setInt(3, quantity);
+            stmt.setDouble(4, price);
+        }, "SellDAO", "addProductToSell");
+    }
+    
+    public Sell findByIdWithProducts(int sellId) {
+            // 1. Buscar a venda e o cliente
+            String sqlSell = """
+                SELECT s.id, s.client_id, s.sell_date, s.total, s.price,
+                       c.name, c.cpf, c.total_points
+                FROM sell s
+                JOIN client c ON s.client_id = c.id
+                WHERE s.id = ?
+            """;
+
+            Sell sell = executeQuery(
+                sqlSell,
+                stmt -> stmt.setInt(1, sellId),
+                rs -> {
+                    if (rs.next()) {
+                        Client client = new Client();
+                        client.setId(rs.getInt("client_id"));
+                        client.setName(rs.getString("name"));
+                        client.setCpf(rs.getString("cpf"));
+                        client.setTotalPoints(rs.getInt("total_points"));
+
+                        Sell s = new Sell();
+                        s.setId(rs.getInt("id"));
+                        s.setClient(client);
+                        s.setSellDate(rs.getTimestamp("sell_date"));
+                        s.setTotal(rs.getDouble("total"));
+                        s.setPrice(rs.getDouble("price"));
+                        return s;
+                    }
+                    return null;
+                },
+                "SellDAO",
+                "findByIdWithProducts"
+            );
+
+            if (sell == null) {
+                return null; // Venda não encontrada
+            }
+
+            // 2. Buscar produtos da venda
+            String sqlProducts = """
+                SELECT sp.product_id, p.name, p.type, sp.quantity, sp.price
+                FROM sell_product sp
+                JOIN product p ON sp.product_id = p.id
+                WHERE sp.sell_id = ?
+            """;
+
+            List<Product> products = executeQuery(
+                sqlProducts,
+                stmt -> stmt.setInt(1, sellId),
+                rs -> {
+                    List<Product> list = new ArrayList<>();
+                    while (rs.next()) {
+                        Product p = new Product();
+                        p.setId(rs.getInt("product_id"));
+                        p.setName(rs.getString("name"));
+                        p.setType(rs.getString("type"));
+                        p.setPrice(rs.getDouble("price"));
+                        p.setSoldQuantity(rs.getInt("quantity"));
+                        list.add(p);
+                    }
+                    return list;
+                },
+                "SellDAO",
+                "findByIdWithProducts_Products"
+            );
+
+            sell.setProducts(new ArrayList<>(products));
+
+            return sell;
+
+    }
 }

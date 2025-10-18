@@ -5,7 +5,12 @@
 package view;
 
 import controller.ProductController;
+import java.awt.Color;
+import java.awt.Cursor;
+import java.awt.Font;
 import java.util.List;
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import model.Product;
@@ -25,6 +30,7 @@ public class ProductListView extends javax.swing.JFrame {
      */
     public ProductListView() {
         initComponents();
+        aplicarEstilo();
         loadProducts();
 
         tProduto.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -129,20 +135,20 @@ public class ProductListView extends javax.swing.JFrame {
 
         tProduto.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null}
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null}
             },
             new String [] {
-                "Ação", "Código", "Nome", "Tipo", "Valor", "Estoque", "Pontos"
+                "Ação", "Código", "Nome", "Tipo", "Valor", "Estoque"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.Long.class, java.lang.String.class, java.lang.String.class, java.lang.Double.class, java.lang.Long.class, java.lang.Long.class
+                java.lang.String.class, java.lang.Long.class, java.lang.String.class, java.lang.String.class, java.lang.Double.class, java.lang.Long.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false
+                false, false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -161,7 +167,7 @@ public class ProductListView extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(68, 68, 68)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(spProdutos)
                     .addGroup(layout.createSequentialGroup()
@@ -181,7 +187,7 @@ public class ProductListView extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(jButton2))
                             .addComponent(jLabel2))))
-                .addContainerGap(137, Short.MAX_VALUE))
+                .addContainerGap(75, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -272,6 +278,61 @@ public class ProductListView extends javax.swing.JFrame {
             });
         }
     }
+    
+    private void aplicarEstilo() {
+
+        getContentPane().setBackground(new Color(250, 245, 235)); 
+
+        lblCodigo.setForeground(new Color(90, 70, 50));
+        lblNome.setForeground(new Color(90, 70, 50));
+        jLabel2.setForeground(new Color(90, 70, 50));
+
+        ftfCodigo.setBackground(new Color(255, 252, 245));
+        ftfCodigo.setBorder(BorderFactory.createLineBorder(new Color(200, 180, 150)));
+
+        ftfNome.setBackground(new Color(255, 252, 245));
+        ftfNome.setBorder(BorderFactory.createLineBorder(new Color(200, 180, 150)));
+
+        cmbTipo.setBackground(new Color(255, 252, 245));
+        cmbTipo.setBorder(BorderFactory.createLineBorder(new Color(200, 180, 150)));
+
+        estilizarBotao(jButton1); 
+        estilizarBotao(jButton2);
+
+        tProduto.setBackground(new Color(255, 252, 245));
+        tProduto.setForeground(new Color(90, 70, 50));
+        tProduto.setSelectionBackground(new Color(180, 150, 120));
+        tProduto.setSelectionForeground(Color.WHITE);
+        tProduto.getTableHeader().setBackground(new Color(180, 150, 120));
+        tProduto.getTableHeader().setForeground(Color.WHITE);
+        tProduto.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 13));
+        tProduto.setRowHeight(25);
+    }
+
+    private void estilizarBotao(JButton botao) {
+        Color corNormal = new Color(180, 150, 120);
+        Color corHover = new Color(160, 130, 100);
+
+        botao.setBackground(corNormal);
+        botao.setForeground(Color.WHITE);
+        botao.setFont(new Font("Segoe UI", Font.BOLD, 13));
+        botao.setBorderPainted(false);
+        botao.setFocusPainted(false);
+        botao.setCursor(new Cursor(Cursor.HAND_CURSOR));
+
+        botao.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseEntered(java.awt.event.MouseEvent e) {
+                botao.setBackground(corHover);
+            }
+
+            @Override
+            public void mouseExited(java.awt.event.MouseEvent e) {
+                botao.setBackground(corNormal);
+            }
+        });
+    }
+
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

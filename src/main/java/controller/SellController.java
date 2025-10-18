@@ -73,4 +73,24 @@ public class SellController {
             return findAll();
         }
     }
+    
+    public void addProductToSell(int sellId, Product product, int quantity) {
+        if (sellId <= 0 || product == null || quantity <= 0) {
+            throw new IllegalArgumentException("Venda, produto e quantidade devem ser válidos.");
+        }
+
+        sellDAO.addProductToSell(sellId, product.getId(), quantity, product.getPrice());
+
+        ProductController productController = new ProductController();
+        productController.updateStock(product.getId(), -quantity);
+    }
+    
+    public void applyLoyaltyPoints(Sell sell) {
+        sellDAO.applyLoyaltyPoints(sell);
+    }
+    
+    public Sell findByIdWithProducts(int sellId) {
+        return sellDAO.findByIdWithProducts(sellId);
+    }
+    
 }

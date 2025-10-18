@@ -4,7 +4,10 @@
  */
 package view;
 
+import controller.ProductController;
 import controller.SellController;
+import java.awt.Color;
+import java.awt.Font;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -20,13 +23,51 @@ public class SellProductsView extends javax.swing.JFrame {
 
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(SellProductsView.class.getName());
     private final SellController sellController = new SellController();
+    private final ProductController productController = new ProductController();
     private int sellId;
-
-    public SellProductsView(int sellId) {
+    
+     public SellProductsView(int sellId) {
         initComponents();
-        this.sellId = sellId;
+        this.sellId = sellId; 
         lbIdVenda.setText("ID Venda: " + sellId);
         loadProducts();
+
+        tProducts.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                int column = tProducts.columnAtPoint(evt.getPoint());
+                int row = tProducts.rowAtPoint(evt.getPoint());
+
+                if (column == 0) {
+                    editProduct(row);
+                }
+            }
+        });
+        
+        aplicarEstilo();
+    }
+    
+    
+      private void editProduct(int rowIndex) {
+        try {
+            int productId = (int) tProducts.getValueAt(rowIndex, 1);
+
+            if (productId > 0) {
+                Product product = productController.findById(productId);
+                if (product != null) {
+                    new ProductView(product).setVisible(true); // <-- agora abre corretamente
+                } else {
+                    JOptionPane.showMessageDialog(this, "Produto com ID " + productId + " não encontrado.", "Erro de Busca", JOptionPane.ERROR_MESSAGE);
+                }
+            } else {
+                JOptionPane.showMessageDialog(this, "ID de produto inválido.", "Erro", JOptionPane.ERROR_MESSAGE);
+            }
+
+        } catch (ClassCastException e) {
+            JOptionPane.showMessageDialog(this, "Erro interno: ID da tabela não é um número válido. " + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+        } catch (RuntimeException e) {
+            JOptionPane.showMessageDialog(this, "Erro ao buscar produto: " + e.getMessage(), "Erro de Persistência", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     /**
@@ -126,6 +167,23 @@ public class SellProductsView extends javax.swing.JFrame {
             });
         }
     }
+    
+    private void aplicarEstilo() {
+
+        getContentPane().setBackground(new Color(250, 245, 235));
+
+        lbIdVenda.setForeground(new Color(90, 70, 50));
+
+        tProducts.setBackground(new Color(255, 252, 245));
+        tProducts.setForeground(new Color(90, 70, 50));
+        tProducts.setSelectionBackground(new Color(180, 150, 120));
+        tProducts.setSelectionForeground(Color.WHITE);
+        tProducts.getTableHeader().setBackground(new Color(180, 150, 120));
+        tProducts.getTableHeader().setForeground(Color.WHITE);
+        tProducts.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 13));
+        tProducts.setRowHeight(25);
+    }
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JScrollPane jScrollPane1;

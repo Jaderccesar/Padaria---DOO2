@@ -5,6 +5,11 @@
 package view;
 
 import controller.ProductController;
+import java.awt.Color;
+import java.awt.Cursor;
+import java.awt.Font;
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import model.Product;
 
@@ -23,6 +28,7 @@ public class ProductView extends javax.swing.JFrame {
     public ProductView() {
         initComponents();
         setTitle("Novo Produto");
+        aplicarEstilo();
     }
     
     public ProductView(Product productToEdit) {
@@ -37,6 +43,8 @@ public class ProductView extends javax.swing.JFrame {
         ftfEstoque.setText(String.valueOf(productToEdit.getStockQuantity()));
         ftfPonto.setText(String.valueOf(productToEdit.getPointCost()));
         cmbTipo.setSelectedItem(productToEdit.getType()); 
+        
+        aplicarEstilo();
     }
 
     /**
@@ -48,6 +56,7 @@ public class ProductView extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jPanel1 = new javax.swing.JPanel();
         lblNome = new javax.swing.JLabel();
         ftfNome = new javax.swing.JFormattedTextField();
         lblValor = new javax.swing.JLabel();
@@ -101,34 +110,37 @@ public class ProductView extends javax.swing.JFrame {
             }
         });
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lblNome)
-                    .addComponent(ftfNome, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblPonto)
-                    .addComponent(lblValor)
-                    .addComponent(lblTipo)
-                    .addComponent(ftfValor, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(cmbTipo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(btnSalvar)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnVoltar))
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addComponent(ftfPonto, javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(ftfEstoque, javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(lblEstoque, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addContainerGap(278, Short.MAX_VALUE))
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(28, 28, 28)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 17, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lblNome)
+                            .addComponent(ftfNome, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lblPonto)
+                            .addComponent(lblValor)
+                            .addComponent(lblTipo)
+                            .addComponent(ftfValor, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(cmbTipo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addComponent(ftfPonto, javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(ftfEstoque, javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(lblEstoque, javax.swing.GroupLayout.Alignment.LEADING))))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(btnVoltar)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnSalvar)))
+                .addGap(38, 38, 38))
         );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(15, 15, 15)
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(35, 35, 35)
                 .addComponent(lblNome)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(ftfNome, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -149,10 +161,21 @@ public class ProductView extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(ftfPonto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 34, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnSalvar)
                     .addComponent(btnVoltar))
-                .addGap(20, 20, 20))
+                .addGap(63, 63, 63))
+        );
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
@@ -198,11 +221,65 @@ public class ProductView extends javax.swing.JFrame {
     }//GEN-LAST:event_btnSalvarActionPerformed
 
     private void btnVoltarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVoltarActionPerformed
-        this.dispose();
-        
-        
+        this.dispose();  
     }//GEN-LAST:event_btnVoltarActionPerformed
 
+
+    private void aplicarEstilo() {
+
+        jPanel1.setBackground(new Color(250, 245, 235)); 
+
+        lblNome.setForeground(new Color(90, 70, 50));
+        lblValor.setForeground(new Color(90, 70, 50));
+        lblTipo.setForeground(new Color(90, 70, 50));
+        lblEstoque.setForeground(new Color(90, 70, 50));
+        lblPonto.setForeground(new Color(90, 70, 50));
+
+        ftfNome.setBackground(new Color(255, 252, 245));
+        ftfNome.setBorder(BorderFactory.createLineBorder(new Color(200, 180, 150)));
+
+        ftfValor.setBackground(new Color(255, 252, 245));
+        ftfValor.setBorder(BorderFactory.createLineBorder(new Color(200, 180, 150)));
+
+        ftfEstoque.setBackground(new Color(255, 252, 245));
+        ftfEstoque.setBorder(BorderFactory.createLineBorder(new Color(200, 180, 150)));
+
+        ftfPonto.setBackground(new Color(255, 252, 245));
+        ftfPonto.setBorder(BorderFactory.createLineBorder(new Color(200, 180, 150)));
+
+        cmbTipo.setBackground(new Color(255, 252, 245));
+        cmbTipo.setBorder(BorderFactory.createLineBorder(new Color(200, 180, 150)));
+
+        estilizarBotao(btnSalvar);
+        estilizarBotao(btnVoltar);
+    }
+
+    private void estilizarBotao(JButton botao) {
+        Color corNormal = new Color(180, 150, 120);
+        Color corHover = new Color(160, 130, 100);
+
+        botao.setBackground(corNormal);
+        botao.setForeground(Color.WHITE);
+        botao.setFont(new Font("Segoe UI", Font.BOLD, 13));
+        botao.setBorderPainted(false);
+        botao.setFocusPainted(false);
+        botao.setCursor(new Cursor(Cursor.HAND_CURSOR));
+
+        botao.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseEntered(java.awt.event.MouseEvent e) {
+                botao.setBackground(corHover);
+            }
+
+            @Override
+            public void mouseExited(java.awt.event.MouseEvent e) {
+                botao.setBackground(corNormal);
+            }
+        });
+    }
+
+
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnSalvar;
@@ -212,6 +289,7 @@ public class ProductView extends javax.swing.JFrame {
     private javax.swing.JFormattedTextField ftfNome;
     private javax.swing.JFormattedTextField ftfPonto;
     private javax.swing.JFormattedTextField ftfValor;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JLabel lblEstoque;
     private javax.swing.JLabel lblNome;
     private javax.swing.JLabel lblPonto;

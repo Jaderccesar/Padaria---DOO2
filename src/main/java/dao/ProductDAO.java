@@ -125,4 +125,14 @@ public class ProductDAO extends AbstractDAO<Product, Integer> {
             return products;
         }, "ProductDAO", "filter");
     }
+    
+    public void updateStock(int productId, int quantitySold) {
+        System.out.println("no dao"+quantitySold);
+        String sql = "UPDATE product SET stock_quantity = stock_quantity - ? WHERE id = ?";
+
+        executeUpdate(sql, stmt -> {
+            stmt.setInt(1, quantitySold);
+            stmt.setInt(2, productId);
+        }, "ProductDAO", "updateStock");
+    }
 }

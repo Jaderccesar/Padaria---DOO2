@@ -5,7 +5,12 @@
 package view;
 
 import controller.ClientController;
+import java.awt.Color;
+import java.awt.Cursor;
+import java.awt.Font;
 import java.util.List;
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import model.Client;
@@ -26,6 +31,7 @@ public class ClientListView extends javax.swing.JFrame {
     public ClientListView() {
         initComponents();
         loadClients();
+        aplicarEstilo();
         
         tCliente.addMouseListener(new java.awt.event.MouseAdapter() {
             
@@ -133,31 +139,32 @@ public class ClientListView extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(ftfCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(ftfNome, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(ftfCPF, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(63, 63, 63)
-                        .addComponent(btnFiltrar)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnNovoCliente))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(lblCodigo)
-                        .addGap(35, 35, 35)
-                        .addComponent(lblNome)
-                        .addGap(164, 164, 164)
-                        .addComponent(lblCPF))
-                    .addComponent(spCliente))
-                .addContainerGap(17, Short.MAX_VALUE))
+                .addGap(53, 53, 53)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(spCliente)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createSequentialGroup()
+                            .addComponent(ftfCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addComponent(ftfNome, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGap(18, 18, 18)
+                            .addComponent(ftfCPF, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGap(63, 63, 63)
+                            .addComponent(btnFiltrar)
+                            .addGap(18, 18, 18)
+                            .addComponent(btnNovoCliente))
+                        .addGroup(layout.createSequentialGroup()
+                            .addComponent(lblCodigo)
+                            .addGap(35, 35, 35)
+                            .addComponent(lblNome)
+                            .addGap(164, 164, 164)
+                            .addComponent(lblCPF))))
+                .addContainerGap(97, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(37, 37, 37)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblCodigo)
                     .addComponent(lblNome)
@@ -170,8 +177,8 @@ public class ClientListView extends javax.swing.JFrame {
                     .addComponent(btnFiltrar)
                     .addComponent(btnNovoCliente))
                 .addGap(18, 18, 18)
-                .addComponent(spCliente, javax.swing.GroupLayout.DEFAULT_SIZE, 281, Short.MAX_VALUE)
-                .addContainerGap())
+                .addComponent(spCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 279, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(69, Short.MAX_VALUE))
         );
 
         pack();
@@ -253,6 +260,59 @@ public class ClientListView extends javax.swing.JFrame {
             });
         } 
     }
+    
+
+    private void aplicarEstilo() {
+
+        getContentPane().setBackground(new Color(250, 245, 235)); 
+
+        lblCodigo.setForeground(new Color(90, 70, 50));
+        lblNome.setForeground(new Color(90, 70, 50));
+        lblCPF.setForeground(new Color(90, 70, 50));
+
+        ftfCodigo.setBackground(new Color(255, 252, 245));
+        ftfCodigo.setBorder(BorderFactory.createLineBorder(new Color(200, 180, 150)));
+
+        ftfNome.setBackground(new Color(255, 252, 245));
+        ftfNome.setBorder(BorderFactory.createLineBorder(new Color(200, 180, 150)));
+
+        ftfCPF.setBackground(new Color(255, 252, 245));
+        ftfCPF.setBorder(BorderFactory.createLineBorder(new Color(200, 180, 150)));
+
+        estilizarBotao(btnFiltrar);
+        estilizarBotao(btnNovoCliente);
+
+        tCliente.setBackground(new Color(255, 250, 240));
+        tCliente.setForeground(new Color(60, 60, 60));
+        tCliente.setSelectionBackground(new Color(200, 180, 150));
+        tCliente.setSelectionForeground(Color.BLACK);
+        tCliente.setGridColor(new Color(220, 210, 200));
+    }
+    
+    private void estilizarBotao(JButton botao) {
+        Color corNormal = new Color(180, 150, 120);
+        Color corHover = new Color(160, 130, 100);
+
+        botao.setBackground(corNormal);
+        botao.setForeground(Color.WHITE);
+        botao.setFont(new Font("Segoe UI", Font.BOLD, 13));
+        botao.setBorderPainted(false);
+        botao.setFocusPainted(false);
+        botao.setCursor(new Cursor(Cursor.HAND_CURSOR));
+
+        botao.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseEntered(java.awt.event.MouseEvent e) {
+                botao.setBackground(corHover);
+            }
+
+            @Override
+            public void mouseExited(java.awt.event.MouseEvent e) {
+                botao.setBackground(corNormal);
+            }
+        });
+    }
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnFiltrar;
     private javax.swing.JButton btnNovoCliente;

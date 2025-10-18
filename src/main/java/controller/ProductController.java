@@ -84,4 +84,14 @@ public class ProductController {
             throw new RuntimeException("Falha ao localizar produto no banco. Detalhes no console.", e);
         }
     }
+  
+    
+    public void updateStock(int productId, int quantitySold) {
+        if (productId <= 0) {
+            throw new IllegalArgumentException("ID do produto inválido.");
+        }
+        System.out.println("no controller" + productId + quantitySold);
+        ProductDAO productDAO = new ProductDAO();
+        productDAO.updateStock(productId, quantitySold);
+    }
 }

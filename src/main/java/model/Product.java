@@ -16,6 +16,7 @@ public class Product {
     private String type;
     private int stockQuantity;
     private int pointCost;
+    private int soldQuantity;
     
     public Product(){
     
@@ -32,6 +33,11 @@ public class Product {
     public void setId(int id) {
         this.id = id;
     }
+    
+    public void setSoldQuantity(int soldQuantity) {
+        this.soldQuantity = soldQuantity;
+    }
+    
     public void setName(String name) {
         this.name = name;
     }
@@ -54,6 +60,10 @@ public class Product {
       
     public int getId() {
         return id;
+    }
+    
+    public int getSoldQuantity() {
+        return soldQuantity;
     }
 
     public String getName() {

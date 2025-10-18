@@ -5,8 +5,17 @@
 package view;
 
 import controller.SellController;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Cursor;
+import java.awt.Font;
+import java.awt.GradientPaint;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.util.List;
+import javax.swing.BorderFactory;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.table.DefaultTableModel;
 import model.Client;
 import model.Sell;
@@ -26,6 +35,7 @@ public class SellListView extends javax.swing.JFrame {
     public SellListView() {
         initComponents();
         loadSells();
+        aplicarEstilo();
         
         tSell.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
@@ -58,10 +68,10 @@ public class SellListView extends javax.swing.JFrame {
 
             int sellId = (int) tSell.getValueAt(rowIndex, 1);
 
-            Sell productToEdit = sellController.findById(sellId);
+            Sell sellToEdit = sellController.findByIdWithProducts(sellId);
 
-            if (productToEdit != null) {
-                // new SellView(sellToEdit).setVisible(true);
+            if (sellToEdit != null) {
+                new SellView(sellToEdit).setVisible(true);
             } else {
                 JOptionPane.showMessageDialog(this, "Erro: Venda com ID " + sellId + " não encontrado.", "Erro de Busca", JOptionPane.ERROR_MESSAGE);
             }
@@ -166,7 +176,7 @@ public class SellListView extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(105, 105, 105)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 772, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
@@ -186,12 +196,12 @@ public class SellListView extends javax.swing.JFrame {
                                 .addComponent(btFiltrar)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(btVenda)))))
-                .addContainerGap(214, Short.MAX_VALUE))
+                .addContainerGap(115, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(42, 42, 42)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(27, 27, 27)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(jLabel2)
@@ -205,7 +215,7 @@ public class SellListView extends javax.swing.JFrame {
                     .addComponent(btVenda))
                 .addGap(24, 24, 24)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 286, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(53, Short.MAX_VALUE))
+                .addContainerGap(68, Short.MAX_VALUE))
         );
 
         pack();
@@ -213,7 +223,7 @@ public class SellListView extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btVendaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btVendaActionPerformed
-        //Fazer a chamada da tela de venda
+        java.awt.EventQueue.invokeLater(() -> new SellView().setVisible(true));
     }//GEN-LAST:event_btVendaActionPerformed
 
     private void btFiltrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btFiltrarActionPerformed
@@ -289,6 +299,60 @@ public class SellListView extends javax.swing.JFrame {
             });
         }
     }
+    
+    private void aplicarEstilo() {
+        getContentPane().setBackground(new Color(245, 240, 230));
+
+        estilizarBotao(btFiltrar, new Color(160, 130, 90));  
+        estilizarBotao(btVenda, new Color(160, 130, 90));     
+
+        tSell.getTableHeader().setBackground(new Color(180, 150, 110)); 
+        tSell.getTableHeader().setForeground(Color.WHITE);
+        tSell.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 14));
+
+        tSell.setFont(new Font("Segoe UI", Font.PLAIN, 13));
+        tSell.setRowHeight(25);
+
+
+        tSell.setDefaultRenderer(Object.class, new javax.swing.table.DefaultTableCellRenderer() {
+            @Override
+            public java.awt.Component getTableCellRendererComponent(
+                    javax.swing.JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+
+                java.awt.Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+                if (!isSelected) {
+                    c.setBackground(row % 2 == 0 ? new Color(250, 247, 240) : Color.WHITE);
+                    c.setForeground(new Color(60, 50, 40));
+                } else {
+                    c.setBackground(new Color(193, 154, 107));
+                    c.setForeground(Color.WHITE);
+                }
+                return c;
+            }
+        });
+    }
+
+    private void estilizarBotao(javax.swing.JButton botao, Color corBase) {
+        botao.setFocusPainted(false);
+        botao.setForeground(Color.WHITE);
+        botao.setBackground(corBase);
+        botao.setFont(new Font("Segoe UI", Font.BOLD, 14));
+        botao.setBorder(BorderFactory.createEmptyBorder(8, 16, 8, 16));
+        botao.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+
+        botao.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseEntered(java.awt.event.MouseEvent e) {
+                botao.setBackground(corBase.brighter());
+            }
+
+            @Override
+            public void mouseExited(java.awt.event.MouseEvent e) {
+                botao.setBackground(corBase);
+            }
+        });
+    }
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btFiltrar;
