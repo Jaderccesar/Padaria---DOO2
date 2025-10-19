@@ -42,7 +42,9 @@ public class ProductListView extends javax.swing.JFrame {
 
                 if (column == 0) {
                     editProduct(row);
-                }
+                }else if (column == 1) { 
+                    removeProduct(row); 
+            }
             }
         });
     }
@@ -51,7 +53,7 @@ public class ProductListView extends javax.swing.JFrame {
 
         try {
 
-            int productId = (int) tProduto.getValueAt(rowIndex, 1);
+            int productId = (int) tProduto.getValueAt(rowIndex, 2);
 
             Product productToEdit = productController.findById(productId);
 
@@ -67,6 +69,25 @@ public class ProductListView extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Erro ao buscar produto: " + e.getMessage(), "Erro de Persistência", JOptionPane.ERROR_MESSAGE);
         }
     }
+    
+    private void removeProduct(int rowIndex){
+        int productId = (int) tProduto.getValueAt(rowIndex, 2); 
+        int confirm = JOptionPane.showConfirmDialog(this, 
+        "Tem certeza que deseja remover o produto ID " + productId + "?", 
+        "Confirmação", JOptionPane.YES_NO_OPTION);
+
+        if (confirm == JOptionPane.YES_OPTION) {
+            try {
+                productController.deleteProduct(productId); 
+                loadProducts(); 
+                JOptionPane.showMessageDialog(this, "Produto removido com sucesso!");
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this, "Erro ao remover: " + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+            } 
+        }
+    }
+    
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -135,20 +156,20 @@ public class ProductListView extends javax.swing.JFrame {
 
         tProduto.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null}
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null}
             },
             new String [] {
-                "Ação", "Código", "Nome", "Tipo", "Valor", "Estoque"
+                "Editar", "Remover", "Código", "Nome", "Tipo", "Valor", "Estoque"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.Long.class, java.lang.String.class, java.lang.String.class, java.lang.Double.class, java.lang.Long.class
+                java.lang.String.class, java.lang.String.class, java.lang.Long.class, java.lang.String.class, java.lang.String.class, java.lang.Double.class, java.lang.Long.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false
+                false, false, false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -161,6 +182,10 @@ public class ProductListView extends javax.swing.JFrame {
         });
         tProduto.getTableHeader().setReorderingAllowed(false);
         spProdutos.setViewportView(tProduto);
+        if (tProduto.getColumnModel().getColumnCount() > 0) {
+            tProduto.getColumnModel().getColumn(0).setMaxWidth(60);
+            tProduto.getColumnModel().getColumn(1).setMaxWidth(60);
+        }
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -268,7 +293,8 @@ public class ProductListView extends javax.swing.JFrame {
 
         for (Product product : listProducts) {
             modelo.addRow(new Object[]{
-                "Editar",
+                "<html>✏️️</html>",
+                "<html>❌</html>",
                 product.getId(),
                 product.getName(),
                 product.getType(),

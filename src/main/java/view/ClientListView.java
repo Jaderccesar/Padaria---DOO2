@@ -14,7 +14,6 @@ import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import model.Client;
-import model.Product;
 
 /**
  *
@@ -42,6 +41,8 @@ public class ClientListView extends javax.swing.JFrame {
 
             if (column == 0) { 
                 editProduct(row); 
+            } else if (column == 1) { 
+                removeClient(row);
             }
         }});
         
@@ -51,7 +52,7 @@ public class ClientListView extends javax.swing.JFrame {
         
         try {
 
-        int productId = (int) tCliente.getValueAt(rowIndex, 1); 
+        int productId = (int) tCliente.getValueAt(rowIndex, 2); 
            
         Client clientToEdit = clientController.findById(productId); 
         
@@ -67,6 +68,25 @@ public class ClientListView extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Erro ao buscar produto: " + e.getMessage(), "Erro de Persistência", JOptionPane.ERROR_MESSAGE);
         }
     }
+    
+    private void removeClient(int rowIndex){
+    
+        int clientId = (int) tCliente.getValueAt(rowIndex, 2); 
+        int confirm = JOptionPane.showConfirmDialog(this, 
+        "Tem certeza que deseja remover o cliente ID " + clientId + "?", 
+        "Confirmação", JOptionPane.YES_NO_OPTION);
+
+        if (confirm == JOptionPane.YES_OPTION) {
+            try {
+                clientController.deleteClient(clientId); 
+                loadClients(); // Recarregar tabela
+                JOptionPane.showMessageDialog(this, "Cliente removido com sucesso!");
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this, "Erro ao remover: " + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+            } 
+        }
+    }
+    
     
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -107,20 +127,20 @@ public class ClientListView extends javax.swing.JFrame {
 
         tCliente.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null}
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null}
             },
             new String [] {
-                "Ação", "Código", "Nome", "CPF", "Telefone", "Pontos"
+                "Editar", "Remover", "Código", "Nome", "CPF", "Telefone", "Pontos"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class
+                java.lang.String.class, java.lang.String.class, java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false
+                false, false, false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -133,6 +153,10 @@ public class ClientListView extends javax.swing.JFrame {
         });
         tCliente.getTableHeader().setReorderingAllowed(false);
         spCliente.setViewportView(tCliente);
+        if (tCliente.getColumnModel().getColumnCount() > 0) {
+            tCliente.getColumnModel().getColumn(0).setMaxWidth(60);
+            tCliente.getColumnModel().getColumn(1).setMaxWidth(60);
+        }
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -251,7 +275,8 @@ public class ClientListView extends javax.swing.JFrame {
        
         for (Client client : listClients) {
             modelo.addRow(new Object[] {
-                "Editar",
+                "<html>✏️️</html>",
+                "<html>❌</html>",
                 client.getId(),
                 client.getName(),
                 client.getCpf(),

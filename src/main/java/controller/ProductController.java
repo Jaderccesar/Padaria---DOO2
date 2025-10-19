@@ -7,6 +7,7 @@ package controller;
 import dao.ProductDAO;
 import java.util.List;
 import model.Product;
+import dao.LoggerDAO;
 
 /**
  *
@@ -15,6 +16,9 @@ import model.Product;
 public class ProductController {
     
     private final ProductDAO productDAO = new ProductDAO();
+    private final LoggerDAO loggerDAO = new LoggerDAO();
+    String usuario = "admin";
+    String class_name = "ProductController";
     
     public Integer saveProduct(Product product) throws IllegalArgumentException {
         
@@ -93,5 +97,15 @@ public class ProductController {
         System.out.println("no controller" + productId + quantitySold);
         ProductDAO productDAO = new ProductDAO();
         productDAO.updateStock(productId, quantitySold);
+    }
+    
+    public void deleteProduct(Integer id) {
+        try {
+            loggerDAO.salvarLog(usuario, class_name, "Delete Produto", "Produto com id: " + id + " deletado!", null);
+            productDAO.delete(id);
+        } catch (Exception e) {
+             loggerDAO.salvarLog(usuario, class_name, "Delete Produto", "Falha ao deletar produto com id" + id, null);
+            throw new RuntimeException("Erro ao excluir produto. Detalhes no console.", e);
+        }
     }
 }
