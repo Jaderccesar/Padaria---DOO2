@@ -79,7 +79,7 @@ public class ClientListView extends javax.swing.JFrame {
         if (confirm == JOptionPane.YES_OPTION) {
             try {
                 clientController.deleteClient(clientId); 
-                loadClients(); // Recarregar tabela
+                loadClients();
                 JOptionPane.showMessageDialog(this, "Cliente removido com sucesso!");
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(this, "Erro ao remover: " + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
