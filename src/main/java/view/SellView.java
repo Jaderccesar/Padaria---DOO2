@@ -106,18 +106,17 @@ public class SellView extends javax.swing.JFrame {
     }
      
      public SellView(Sell sell) {
-        this(); // Chama o construtor padrão para inicializar componentes
+        this();
         if (sell != null) {
-            // Preenche o cliente
+
             currentClient = sell.getClient();
             lbClienteNome.setText("Cliente: " + currentClient.getName() + " | Pontos: " + currentClient.getTotalPoints());
 
-            // Preenche os produtos selecionados
             selectedProducts.clear();
             DefaultTableModel model = (DefaultTableModel) tProduto1.getModel();
             model.setRowCount(0);
 
-            for (Product p : sell.getProducts()) { // Supondo que você tenha um método getProducts() que retorna List<Product> da venda
+            for (Product p : sell.getProducts()) { 
                 selectedProducts.add(p);
 
                 model.addRow(new Object[]{
@@ -132,10 +131,9 @@ public class SellView extends javax.swing.JFrame {
 
             atualizarValorCompra();
 
-            // Preenche a tabela de produtos disponíveis, atualizando estoque
             loadAvailableProducts(productController.findAll());
             for (Product p : selectedProducts) {
-                // Remove do estoque disponível os produtos já selecionados
+
                 for (int row = 0; row < tProduto.getRowCount(); row++) {
                     int prodId = (int) tProduto.getValueAt(row, 0);
                     if (prodId == p.getId()) {
@@ -273,7 +271,7 @@ public class SellView extends javax.swing.JFrame {
             }
 
             if (choice == 1) { 
-                int requiredPoints = (int) (total / 10);
+                int requiredPoints = (int) (total / 2) + 1;
                 int clientPoints = currentClient.getTotalPoints() != null ? currentClient.getTotalPoints() : 0;
 
                 if (clientPoints < requiredPoints) {

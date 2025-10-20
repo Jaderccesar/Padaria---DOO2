@@ -129,6 +129,7 @@ public class ClientController {
             loggerDAO.salvarLog(usuario, class_name, "Delete Cliente", "Usuário com id: " + id + " deletado!", null);
             clientDAO.delete(id);
         } catch (Exception e) {
+            e.printStackTrace();
              loggerDAO.salvarLog(usuario, class_name, "Delete Cliente", "Falha ao deletar cliente com id" + id, null);
             throw new RuntimeException("Erro ao excluir cliente. Detalhes no console.", e);
         }

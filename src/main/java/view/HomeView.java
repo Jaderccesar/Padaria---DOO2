@@ -4,6 +4,8 @@
  */
 package view;
 
+import javax.swing.UIManager;
+
 /**
  *
  * @author Usuario
@@ -195,7 +197,7 @@ public class HomeView extends javax.swing.JFrame {
             logger.log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
-
+        
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(() -> new HomeView().setVisible(true));
     }
