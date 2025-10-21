@@ -4,6 +4,7 @@
  */
 package controller;
 
+import dao.LoggerDAO;
 import dao.SellDAO;
 import java.util.List;
 import model.Product;
@@ -16,6 +17,9 @@ import model.Sell;
 public class SellController {
 
     private final SellDAO sellDAO = new SellDAO();
+    private final LoggerDAO loggerDAO = new LoggerDAO();
+    String usuario = "admin";
+    String class_name = "SellController";
 
     public Integer save(Sell sell) {
         if (sell.getClient() == null) {
@@ -92,5 +96,16 @@ public class SellController {
     public Sell findByIdWithProducts(int sellId) {
         return sellDAO.findByIdWithProducts(sellId);
     }
+    
+    public void deleteSell(Integer sellId) {
+        try {
+            loggerDAO.salvarLog(usuario, class_name, "Delete Venda", "Venda com id: " + sellId + " deletada!", null);
+            sellDAO.delete(sellId);
+        } catch (Exception e) {
+            loggerDAO.salvarLog(usuario, class_name, "Delete Venda", "Falha ao deletar venda com id: " + sellId, null);
+            throw new RuntimeException("Erro ao excluir venda. Detalhes no console.", e);
+        }
+    }
+
     
 }

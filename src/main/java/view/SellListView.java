@@ -36,18 +36,6 @@ public class SellListView extends javax.swing.JFrame {
         initComponents();
         loadSells();
         aplicarEstilo();
-        
-        tSell.addMouseListener(new java.awt.event.MouseAdapter() {
-            @Override
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                int column = tSell.columnAtPoint(evt.getPoint());
-                int row = tSell.rowAtPoint(evt.getPoint());
-                
-                if(column == 6){
-                    viewSell(row);
-                }
-            }
-        });
 
         tSell.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
@@ -57,16 +45,37 @@ public class SellListView extends javax.swing.JFrame {
 
                 if (column == 0) {
                     editSell(row);
+                }else if(column == 7){
+                    viewSell(row);
+                }else if(column == 1){
+                    removeSell(row);
                 }
             }
         });
+    }
+    
+    private void removeSell(int rowIndex){
+        int sellId = (int) tSell.getValueAt(rowIndex, 2); 
+        int confirm = JOptionPane.showConfirmDialog(this, 
+        "Tem certeza que deseja remover a venda ID " + sellId + "?", 
+        "Confirmação", JOptionPane.YES_NO_OPTION);
+
+        if (confirm == JOptionPane.YES_OPTION) {
+            try {
+                sellController.deleteSell(sellId); 
+                loadSells(); 
+                JOptionPane.showMessageDialog(this, "Venda removida com sucesso!");
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this, "Erro ao remover: " + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+            } 
+        }
     }
 
     private void editSell(int rowIndex) {
 
         try {
 
-            int sellId = (int) tSell.getValueAt(rowIndex, 1);
+            int sellId = (int) tSell.getValueAt(rowIndex, 2);
 
             Sell sellToEdit = sellController.findByIdWithProducts(sellId);
 
@@ -85,7 +94,7 @@ public class SellListView extends javax.swing.JFrame {
 
     private void viewSell(int rowIndex) {
         try {
-            int sellId = (int) tSell.getValueAt(rowIndex, 1);
+            int sellId = (int) tSell.getValueAt(rowIndex, 2);
 
 
             if (sellId > 0) {
@@ -125,20 +134,20 @@ public class SellListView extends javax.swing.JFrame {
 
         tSell.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null}
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null}
             },
             new String [] {
-                "Ação", "ID", "Nome", "CPF", "Total", "Data", "Produtos"
+                "Editar", "Remover", "ID", "Nome", "CPF", "Total", "Data", "Produtos"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.Double.class, java.lang.String.class, java.lang.String.class
+                java.lang.String.class, java.lang.String.class, java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.Double.class, java.lang.String.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false
+                false, false, false, false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -150,6 +159,9 @@ public class SellListView extends javax.swing.JFrame {
             }
         });
         jScrollPane1.setViewportView(tSell);
+        if (tSell.getColumnModel().getColumnCount() > 0) {
+            tSell.getColumnModel().getColumn(1).setResizable(false);
+        }
 
         jLabel1.setText("Código");
 
@@ -289,7 +301,8 @@ public class SellListView extends javax.swing.JFrame {
         for (Sell sell : listSells) {
             Client c1 = sell.getClient();
             modelo.addRow(new Object[]{
-                "Editar",
+                "<html>✏</html>",
+                "<html>❌</html>",
                 sell.getId(),
                 c1.getName(),
                 c1.getCpf(),

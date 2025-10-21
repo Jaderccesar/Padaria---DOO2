@@ -131,7 +131,7 @@ public class SellDAO extends AbstractDAO<Sell, Integer> {
         String sql = "DELETE FROM sell WHERE id = ?";
         executeUpdate(sql, stmt -> stmt.setInt(1, id), "SellDAO", "delete");
     }
-
+    
     private Sell mapResultSetToSell(ResultSet rs) throws SQLException {
         Sell sell = new Sell();
 
@@ -292,6 +292,5 @@ public class SellDAO extends AbstractDAO<Sell, Integer> {
             sell.setProducts(new ArrayList<>(products));
 
             return sell;
-
     }
 }
