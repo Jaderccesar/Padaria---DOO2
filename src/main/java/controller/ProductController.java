@@ -10,18 +10,25 @@ import model.Product;
 import dao.LoggerDAO;
 
 /**
+ * Controlador responsável pelas operações de produto.
  *
- * @author Daniel Coelho - PAD 1 e 2 - New - "Adicionado o CRUD de um PRODUTO" - Sprint 1
+ * Atua como intermediário entre a camada de apresentação (View) e a camada de dados (DAO),
+ * aplicando validações, lógica de negócio e registrando logs de operações.
+ * 
  */
 public class ProductController {
     
+    // DAO responsável pelas operações de banco de dados relacionadas a produtos 
     private final ProductDAO productDAO = new ProductDAO();
+    // DAO responsável pelo registro de logs 
     private final LoggerDAO loggerDAO = new LoggerDAO();
     String usuario = "admin";
     String class_name = "ProductController";
     
+    //Salva um novo produto no banco após realizar validações.
     public Integer saveProduct(Product product) throws IllegalArgumentException {
         
+        // --- Validações de campos obrigatórios ---
         if (product.getName() == null || product.getName().trim().isEmpty()) {
             throw new IllegalArgumentException("O nome do produto é obrigatório.");
         }
@@ -42,6 +49,7 @@ public class ProductController {
          return productDAO.save(product);
     }
     
+    //Atualiza um produto existente com base em seu ID.
     public void updateProduct(Product product, Integer id) {
     
         if (product.getName() == null || product.getName().trim().isEmpty()) {
@@ -64,6 +72,7 @@ public class ProductController {
         productDAO.update(product, id);
     }
     
+    //Retorna todos os produtos cadastrados.
     public List<Product> findAll() {
         try {
             return productDAO.findAll();
@@ -72,6 +81,7 @@ public class ProductController {
         }
     }
     
+    //Filtra produtos de acordo com os parâmetros informados.
     public List<Product> filterProducts(int id, String name, String type) {
         
         if(id > 0 || !name.isEmpty() || !type.isEmpty()){
@@ -81,6 +91,7 @@ public class ProductController {
         }
     }
 
+    //Busca um produto pelo seu ID.
     public Product findById(Integer intValue) {
         try {
             return productDAO.findById(intValue);
@@ -89,7 +100,7 @@ public class ProductController {
         }
     }
   
-    
+    //Atualiza o estoque de um produto após uma venda.
     public void updateStock(int productId, int quantitySold) {
         if (productId <= 0) {
             throw new IllegalArgumentException("ID do produto inválido.");
@@ -99,6 +110,7 @@ public class ProductController {
         productDAO.updateStock(productId, quantitySold);
     }
     
+    //Exclui um produto do banco.
     public void deleteProduct(Integer id) {
         try {
             loggerDAO.salvarLog(usuario, class_name, "Delete Produto", "Produto com id: " + id + " deletado!", null);

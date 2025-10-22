@@ -75,7 +75,7 @@ public class LoginView extends javax.swing.JFrame {
         });
         jPanel1.add(BtnLogin, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 390, -1, -1));
 
-        jLabel1.setIcon(new javax.swing.ImageIcon("C:\\Users\\User\\Downloads\\20251019_1048_Padaria SVF_remix_01k7ybk026efq855tq9y4azg39.png")); // NOI18N
+        jLabel1.setIcon(new javax.swing.ImageIcon("C:\\Users\\Acer\\Downloads\\20251019_1048_Padaria SVF_remix_01k7ybk026efq855tq9y4azg39.png")); // NOI18N
         jLabel1.setText("jLabel1");
         jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1020, 820));
 

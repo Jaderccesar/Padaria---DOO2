@@ -10,16 +10,21 @@ import java.util.List;
 import model.Client;
 
 /**
- *
- * @author Daniel Coelho
+ * Controlador responsável por gerenciar a lógica de negócios da entidade Client.
+ * Atua como intermediário entre a camada de apresentação (View) e a camada de persistência (DAO),
+ * validando dados, aplicando regras e registrando logs.
  */
 public class ClientController {
 
+    // Instância de acesso à base de dados para os clientes 
     private final ClientDAO clientDAO = new ClientDAO();
+    // Instância de acesso à base de dados para logs 
     private final LoggerDAO loggerDAO = new LoggerDAO();
+    
     String usuario = "admin";
     String class_name = "ClientController";
 
+    //Valida e salva um novo cliente no banco de dados.
     public Integer saveClient(Client client) throws IllegalArgumentException {
 
         if (client.getName() == null || client.getName().trim().isEmpty()) {
@@ -57,6 +62,7 @@ public class ClientController {
         return clientDAO.save(client);
     }
 
+    //Atualiza os dados de um cliente existente.
     public void updateClient(Client client, Integer id) {
 
         if (client.getName() == null || client.getName().trim().isEmpty()) {
@@ -97,6 +103,7 @@ public class ClientController {
         clientDAO.update(client, id);
     }
 
+    //Retorna todos os clientes cadastrados.
     public List<Client> findAll() {
         try {
             return clientDAO.findAll();
@@ -106,6 +113,7 @@ public class ClientController {
         }
     }
 
+    //Aplica filtros de busca para clientes.
     public List<Client> filterClients(int id, String name, String cpf) {
 
         if (id > 0 || (name != null && !name.isEmpty()) || (cpf != null && !cpf.isEmpty())) {
@@ -115,6 +123,7 @@ public class ClientController {
         }
     }
 
+    // Busca um cliente específico pelo ID.
     public Client findById(Integer id) {
         try {
             return clientDAO.findById(id);
@@ -124,6 +133,7 @@ public class ClientController {
         }
     }
 
+    //Exclui um cliente com base no ID informado.
     public void deleteClient(Integer id) {
         try {
             loggerDAO.salvarLog(usuario, class_name, "Delete Cliente", "Usuário com id: " + id + " deletado!", null);
@@ -135,6 +145,7 @@ public class ClientController {
         }
     }
     
+    //Busca um cliente pelo CPF.
     public Client findByCpf(String cpf) {
         try {
             List<Client> clients = clientDAO.filter(0, null, cpf);

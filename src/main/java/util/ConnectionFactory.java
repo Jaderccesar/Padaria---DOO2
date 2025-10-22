@@ -18,10 +18,13 @@ public class ConnectionFactory {
     //private static final String USER = "postgres";
     //private static final String PASSWORD = "padariadanieljaderleandro12";
 
-    private static final String URL = "jdbc:postgresql://localhost:5432/postgres";
-    private static final String USER = "postgres";
-    private static final String PASSWORD = "jader_1208";
+    //private static final String URL = "jdbc:postgresql://localhost:5432/postgres";;
+    //private static final String USER = "postgres";
+    //private static final String PASSWORD = "jader_1208";
     
+    private static final String URL = "jdbc:postgresql://localhost:5432/postgres";;
+    private static final String USER = "postgres";
+    private static final String PASSWORD = "lendro";
     
      public static Connection getConnection() {
         try {

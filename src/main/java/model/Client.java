@@ -4,10 +4,7 @@
  */
 package model;
 
-/**
- *
- * @author Daniel Coelho
- */
+
 public class Client {
 
     private Integer id;
@@ -16,9 +13,12 @@ public class Client {
     private String phone;
     private Integer totalPoints;
 
+    //Construtor padrão (sem parâmetros).
     public Client() {
     }
 
+    //Construtor com parâmetros.
+    //Permite instanciar um objeto Client já com os dados iniciais definidos.
     public Client(String name, String cpf, String phone, Integer totalPoints) {
         this.name = name;
         this.cpf = cpf;
