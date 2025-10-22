@@ -21,8 +21,10 @@ import model.Client;
 import model.Sell;
 
 /**
+ * **SellListView.java**
+ * Esta classe representa a tela de listagem e gerenciamento de vendas. 
+ * Permite visualizar, filtrar, editar, remover e ver os produtos de uma venda.
  *
- * @author Usuario
  */
 public class SellListView extends javax.swing.JFrame {
 
@@ -30,7 +32,8 @@ public class SellListView extends javax.swing.JFrame {
     private final SellController sellController = new SellController();
 
     /**
-     * Creates new form SellListView2
+     * Construtor padrão da classe SellListView.
+     * Inicializa componentes, carrega os dados e configura os listeners de estilo e ação.
      */
     public SellListView() {
         initComponents();
@@ -54,6 +57,9 @@ public class SellListView extends javax.swing.JFrame {
         });
     }
     
+    /**
+     * Remove a venda selecionada da tabela e do banco de dados após confirmação.
+     */
     private void removeSell(int rowIndex){
         int sellId = (int) tSell.getValueAt(rowIndex, 2); 
         int confirm = JOptionPane.showConfirmDialog(this, 
@@ -71,6 +77,10 @@ public class SellListView extends javax.swing.JFrame {
         }
     }
 
+    
+    /**
+     * Abre a tela de edição (SellView) com os dados da venda selecionada.
+     */
     private void editSell(int rowIndex) {
 
         try {
@@ -92,6 +102,7 @@ public class SellListView extends javax.swing.JFrame {
         }
     }
 
+    //Abre a tela de visualização dos produtos da venda selecionada.
     private void viewSell(int rowIndex) {
         try {
             int sellId = (int) tSell.getValueAt(rowIndex, 2);
@@ -267,12 +278,17 @@ public class SellListView extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(() -> new SellListView().setVisible(true));
     }
 
+    /**
+     * Carrega todas as vendas disponíveis e preenche a tabela.
+     * Este método é público para ser chamado externamente (e.g., após salvar/editar uma venda).
+     */
     private void loadSells() {
-
         createTable(sellController.findAll());
-
     }
 
+     /**
+     * Filtra as vendas com base nos campos Código, Nome do Cliente e CPF do Cliente.
+     */
     private void filterSells() {
 
         int codFilter = 0;
@@ -293,6 +309,9 @@ public class SellListView extends javax.swing.JFrame {
 
     }
 
+    /**
+     * Preenche a JTable com a lista de objetos Sell.
+     */
     private void createTable(List<Sell> listSells) {
 
         DefaultTableModel modelo = (DefaultTableModel) tSell.getModel();
@@ -312,6 +331,8 @@ public class SellListView extends javax.swing.JFrame {
             });
         }
     }
+    
+    // --- Estilização e Aparência ---
     
     private void aplicarEstilo() {
         getContentPane().setBackground(new Color(245, 240, 230));

@@ -26,7 +26,10 @@ public class Client {
         this.totalPoints = totalPoints;
     }
 
-    // Getters e Setters
+    // ---------------------------
+    // Métodos Getters e Setters
+    // ---------------------------
+    
     public Integer getId() {
         return id;
     }

@@ -31,8 +31,11 @@ import model.Product;
 import model.Sell;
 
 /**
+ * **SellView.java**
+ * Esta classe é o formulário principal para realizar e editar vendas. 
+ * Ela gerencia a busca de clientes, a seleção de produtos, o cálculo do total
+ * da compra e a persistência da venda, incluindo a lógica de pontos de fidelidade.
  *
- * @author Usuario
  */
 public class SellView extends javax.swing.JFrame {
     
@@ -44,9 +47,9 @@ public class SellView extends javax.swing.JFrame {
     private Client currentClient = null;
     private List<Product> selectedProducts = new ArrayList<>();
 
-    /**
-     * Creates new form SellView
-     */
+     /**
+     * Construtor para uma nova venda.
+     */
      public SellView() {
        initComponents();
        DefaultTableModel model = (DefaultTableModel) tProduto1.getModel();
@@ -59,6 +62,9 @@ public class SellView extends javax.swing.JFrame {
     private JTable tAvailable, tSelected;
     private JLabel lbClientInfo;
     
+    /**
+     * Busca o cliente pelo CPF digitado e atualiza o campo de informação do cliente.
+     */
      private void buscarCliente() {
         try {
             String cpf = tfCPF.getText().trim();
@@ -82,8 +88,9 @@ public class SellView extends javax.swing.JFrame {
         }
     }
 
-     
-     
+     /**
+     * Carrega a lista de produtos disponíveis para venda na tabela superior.
+     */
      private void loadAvailableProducts(List<Product> list) {
         try {
             DefaultTableModel model = (DefaultTableModel) tProduto.getModel();
@@ -105,6 +112,10 @@ public class SellView extends javax.swing.JFrame {
         }
     }
      
+     /**
+     * Construtor para edição de uma venda existente.
+     * Carrega os dados da venda na tela.
+     */
      public SellView(Sell sell) {
         this();
         if (sell != null) {
@@ -145,7 +156,10 @@ public class SellView extends javax.swing.JFrame {
         }
     }
 
-    
+    /**
+     * Adiciona um produto selecionado da tabela de produtos disponíveis à lista de produtos da venda.
+     * Ajusta o estoque na tabela de produtos disponíveis.
+     */
     private void adicionarProduto() {
         int row = tProduto.getSelectedRow();
         if (row == -1) {
@@ -206,6 +220,10 @@ public class SellView extends javax.swing.JFrame {
         atualizarValorCompra();
     }
     
+    /**
+     * Remove um produto selecionado da lista de produtos da venda.
+     * Restaura o estoque na tabela de produtos disponíveis.
+     */
     private void removerProduto() {
         int row = tProduto1.getSelectedRow();
         if (row == -1) {
@@ -234,11 +252,18 @@ public class SellView extends javax.swing.JFrame {
         atualizarValorCompra();
     }
     
+    /**
+     * Recalcula o valor total da compra e atualiza o label na tela.
+     */
     private void atualizarValorCompra() {
         double total = selectedProducts.stream().mapToDouble(p -> p.getPrice() * p.getSoldQuantity()).sum();
         lvValorCompra.setText("Valor da Compra: R$ " + String.format("%.2f", total));
     }
     
+    /**
+     * Processa e finaliza a venda: confirma o cliente e os produtos, 
+     * lida com a forma de pagamento (Dinheiro/Pontos) e persiste a venda.
+     */
     private void finalizarVenda() {
         if (currentClient == null) {
             JOptionPane.showMessageDialog(this, "Busque um cliente antes de finalizar a venda.");
@@ -319,7 +344,9 @@ public class SellView extends javax.swing.JFrame {
         }
     }
 
-    
+    /**
+     * Filtra a lista de produtos disponíveis com base nos campos de código, nome e tipo.
+     */
     private void filterProducts() {
 
         String tipoSelecionado = (String) cmbTipo.getSelectedItem();
@@ -342,6 +369,8 @@ public class SellView extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Erro: Certifique-se de que código, é um número válido.", "Erro de Entrada", JOptionPane.ERROR_MESSAGE);
         }
     }
+    
+     // --- Métodos de Estilização ---
     
     private void aplicarEstilo() {
         getContentPane().setBackground(new Color(245, 240, 230));
@@ -549,46 +578,51 @@ public class SellView extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addGap(20, 20, 20)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(32, 32, 32)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel2)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addGroup(layout.createSequentialGroup()
-                                    .addComponent(lvValorCompra, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(btnFinalizar))
-                                .addComponent(spProdutos, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 649, Short.MAX_VALUE)
-                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                    .addComponent(tfCPF, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGap(18, 18, 18)
-                                    .addComponent(btnPesquisarCliente)
-                                    .addGap(18, 18, 18)
-                                    .addComponent(lbClienteNome, javax.swing.GroupLayout.PREFERRED_SIZE, 226, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addComponent(spProdutos1))))
+                        .addComponent(jLabel2)
+                        .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(93, 93, 93)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(ftfCodigoProduto, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lblCodigo))
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lblNome)
-                            .addComponent(ftfNomeProduto, javax.swing.GroupLayout.PREFERRED_SIZE, 191, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(cmbTipo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(40, 40, 40)
-                                .addComponent(btnFiltrar))
-                            .addComponent(jLabel3)))
+                                .addComponent(tfCPF, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(btnPesquisarCliente)
+                                .addGap(18, 18, 18)
+                                .addComponent(lbClienteNome, javax.swing.GroupLayout.PREFERRED_SIZE, 226, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(73, 73, 73)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(ftfCodigoProduto, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(lblCodigo))
+                                .addGap(18, 18, 18)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(lblNome)
+                                    .addComponent(ftfNomeProduto, javax.swing.GroupLayout.PREFERRED_SIZE, 191, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(18, 18, 18)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(cmbTipo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(40, 40, 40)
+                                        .addComponent(btnFiltrar))
+                                    .addComponent(jLabel3))))
+                        .addContainerGap(694, Short.MAX_VALUE))))
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(spProdutos, javax.swing.GroupLayout.PREFERRED_SIZE, 566, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnAdicionar)
+                    .addComponent(btnRemover))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(188, 188, 188)
-                        .addComponent(btnRemover)
-                        .addGap(133, 133, 133)
-                        .addComponent(btnAdicionar)))
-                .addContainerGap(48, Short.MAX_VALUE))
+                        .addComponent(lvValorCompra, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnFinalizar))
+                    .addComponent(spProdutos1, javax.swing.GroupLayout.PREFERRED_SIZE, 605, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -611,19 +645,21 @@ public class SellView extends javax.swing.JFrame {
                     .addComponent(ftfNomeProduto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(cmbTipo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnFiltrar))
+                .addGap(37, 37, 37)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(30, 30, 30)
+                        .addComponent(btnAdicionar)
+                        .addGap(136, 136, 136)
+                        .addComponent(btnRemover))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(spProdutos, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                        .addComponent(spProdutos1, javax.swing.GroupLayout.PREFERRED_SIZE, 266, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(18, 18, 18)
-                .addComponent(spProdutos, javax.swing.GroupLayout.PREFERRED_SIZE, 301, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnAdicionar)
-                    .addComponent(btnRemover))
-                .addGap(29, 29, 29)
-                .addComponent(spProdutos1, javax.swing.GroupLayout.PREFERRED_SIZE, 301, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(32, 32, 32)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnFinalizar)
                     .addComponent(lvValorCompra))
-                .addContainerGap(125, Short.MAX_VALUE))
+                .addContainerGap(69, Short.MAX_VALUE))
         );
 
         pack();

@@ -7,15 +7,17 @@ package view;
 import javax.swing.UIManager;
 
 /**
- *
- * @author Usuario
+ * **HomeView.java**
+ * Esta classe representa a tela de home da aplicação.
  */
 public class HomeView extends javax.swing.JFrame {
     
+    // Logger para fins de depuração e registro de erros.
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(HomeView.class.getName());
 
     /**
-     * Creates new form HomeView
+     * Construtor padrão da classe HomeView.
+     * Inicializa os componentes da GUI.
      */
     public HomeView() {
         initComponents();
@@ -52,7 +54,7 @@ public class HomeView extends javax.swing.JFrame {
         jDesktopPane1.setBackground(new java.awt.Color(220, 210, 200));
         jDesktopPane1.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
-        jLabel1.setIcon(new javax.swing.ImageIcon("C:\\Users\\Acer\\Downloads\\20251018_1643_Logo Padaria SVF_simple_compose_01k7wdgwmke6gvkc2db4319zna.png")); // NOI18N
+        jLabel1.setIcon(new javax.swing.ImageIcon("C:\\Users\\User\\Downloads\\20251018_1643_Logo Padaria SVF_simple_compose_01k7wdgwmke6gvkc2db4319zna.png")); // NOI18N
         jLabel1.setText("jLabel1");
         jLabel1.setMaximumSize(new java.awt.Dimension(500, 500));
 

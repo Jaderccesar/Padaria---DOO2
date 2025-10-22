@@ -19,6 +19,11 @@ import model.Product;
  */
 public class SellDAO extends AbstractDAO<Sell, Integer> {
 
+    /**
+     * Salva uma nova venda no banco de dados, incluindo os produtos vendidos.
+     * Também aplica pontos de fidelidade ao cliente.
+     *
+     */
     @Override
     public Integer save(Sell sell) {
         String sql = "INSERT INTO sell (client_id, sell_date, total, price) VALUES (?, ?, ?, ?)";
@@ -30,6 +35,7 @@ public class SellDAO extends AbstractDAO<Sell, Integer> {
             stmt.setDouble(4, sell.getPrice());
         }, "SellDAO", "save");
 
+        // Salvar produtos da venda
         for (Product product : sell.getProducts()) {
             int quantity = sell.getQuantity(product);
 
@@ -42,11 +48,16 @@ public class SellDAO extends AbstractDAO<Sell, Integer> {
             }, "SellDAO", "saveProduct");
         }
 
+        // Aplicar pontos de fidelidade
         applyLoyaltyPoints(sell);
 
         return generatedId;
     }
     
+    /**
+     * Retorna a lista de produtos associados a uma venda, com quantidade e preço.
+     *
+     */
     public List<Product> findProductsBySellId(int sellId) {
     String sql = """
         SELECT 
@@ -90,6 +101,10 @@ public class SellDAO extends AbstractDAO<Sell, Integer> {
 }
 
 
+    /**
+     * Busca uma venda pelo ID.
+     *
+     */
     @Override
     public Sell findById(Integer id) {
         String sql = "SELECT * FROM sell WHERE id = ?";
@@ -101,6 +116,9 @@ public class SellDAO extends AbstractDAO<Sell, Integer> {
         }, "SellDAO", "findById");
     }
 
+    /**
+     * Retorna todas as vendas cadastradas, incluindo informações do cliente.
+     */
     @Override
     public List<Sell> findAll() {
         String sql = "SELECT s.id AS sell_id, s.sell_date, s.total, s.price, c.id AS client_id, c.name AS client_name, c.cpf AS client_cpf, c.phone AS client_phone, c.total_points AS client_points  FROM sell s JOIN client c ON c.id = s.client_id order by s.id";
@@ -114,6 +132,10 @@ public class SellDAO extends AbstractDAO<Sell, Integer> {
         }, "SellDAO", "findAll");
     }
 
+    /**
+     * Atualiza uma venda existente no banco de dados.
+     *
+     */
     @Override
     public void update(Sell sell, Integer id) {
         String sql = "UPDATE sell SET client_id = ?, sell_date = ?, total = ?, price = ? WHERE id = ?";
@@ -126,12 +148,19 @@ public class SellDAO extends AbstractDAO<Sell, Integer> {
         }, "SellDAO", "update");
     }
 
+    /**
+     * Exclui uma venda pelo ID.
+     */
     @Override
     public void delete(Integer id) {
         String sql = "DELETE FROM sell WHERE id = ?";
         executeUpdate(sql, stmt -> stmt.setInt(1, id), "SellDAO", "delete");
     }
     
+    /**
+     * Mapeia o ResultSet para um objeto Sell.
+     *
+     */
     private Sell mapResultSetToSell(ResultSet rs) throws SQLException {
         Sell sell = new Sell();
 
@@ -152,6 +181,10 @@ public class SellDAO extends AbstractDAO<Sell, Integer> {
         return sell;
     }
 
+    /**
+     * Filtra vendas por ID, nome do cliente ou CPF.
+     *
+     */
     public List<Sell> filter(int id, String name, String cpf) {
 
         List<Object> parameters = new ArrayList<>();
@@ -190,6 +223,9 @@ public class SellDAO extends AbstractDAO<Sell, Integer> {
         }, "SellDAO", "filter");
     }
 
+    /**
+     * Aplica pontos de fidelidade ao cliente com base no total da venda.
+     */
     public void applyLoyaltyPoints(Sell sell) {
         if (sell == null || sell.getClient() == null) {
             return;
@@ -207,6 +243,10 @@ public class SellDAO extends AbstractDAO<Sell, Integer> {
         }
     }
     
+    /**
+     * Adiciona um produto a uma venda existente.
+     *
+     */
     public void addProductToSell(int sellId, int productId, int quantity, double price) {
         if (sellId <= 0 || productId <= 0 || quantity <= 0 || price < 0) {
             throw new IllegalArgumentException("Venda, produto, quantidade e preço devem ser válidos.");
@@ -222,6 +262,10 @@ public class SellDAO extends AbstractDAO<Sell, Integer> {
         }, "SellDAO", "addProductToSell");
     }
     
+    /**
+     * Busca uma venda completa pelo ID, incluindo produtos associados.
+     *
+     */
     public Sell findByIdWithProducts(int sellId) {
             // 1. Buscar a venda e o cliente
             String sqlSell = """

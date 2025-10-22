@@ -16,22 +16,32 @@ import javax.swing.table.DefaultTableModel;
 import model.Client;
 
 /**
+ * **ClientListView.java**
+ * * Esta classe representa a tela de listagem de clientes (JFrame). 
+ * Ela exibe uma tabela com todos os clientes e permite operações de 
+ * busca (filtro), adição, edição e remoção de clientes.
  *
- * @author Daniel Coelho
  */
 public class ClientListView extends javax.swing.JFrame {
     
+    // Logger para fins de depuração e registro de erros.
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(ClientListView.class.getName());
+    
+    // Instância do controlador para interagir com a lógica de negócio dos clientes.
     private final ClientController clientController = new ClientController();
     
     /**
-     * Creates new form ClientListView
+     * Construtor padrão da classe ClientListView.
+     * Inicializa os componentes da GUI, carrega os dados dos clientes 
+     * e aplica estilos visuais.
      */
     public ClientListView() {
         initComponents();
         loadClients();
         aplicarEstilo();
         
+        // Adiciona um listener de mouse à tabela para capturar cliques nas colunas 
+        // de "Editar" (coluna 0) e "Remover" (coluna 1).
         tCliente.addMouseListener(new java.awt.event.MouseAdapter() {
             
         @Override
@@ -40,7 +50,7 @@ public class ClientListView extends javax.swing.JFrame {
             int row = tCliente.rowAtPoint(evt.getPoint());
 
             if (column == 0) { 
-                editProduct(row); 
+                editClient(row); 
             } else if (column == 1) { 
                 removeClient(row);
             }
@@ -48,40 +58,53 @@ public class ClientListView extends javax.swing.JFrame {
         
     }
 
-    private void editProduct(int rowIndex) {
+    //Abre a tela de edição do cliente selecionado.
+    private void editClient(int rowIndex) {
         
         try {
 
-        int productId = (int) tCliente.getValueAt(rowIndex, 2); 
+        // O ID do cliente está na terceira coluna (índice 2) da tabela.
+        int clientId = (int) tCliente.getValueAt(rowIndex, 2); 
            
-        Client clientToEdit = clientController.findById(productId); 
+        // Busca o objeto Client completo usando o ID obtido.
+        Client clientToEdit = clientController.findById(clientId); 
         
         if (clientToEdit != null) {
+            // Abre a tela ClientView, passando o objeto Client para edição.
             new ClientView(clientToEdit).setVisible(true);
         } else {
-            JOptionPane.showMessageDialog(this, "Erro: Produto com ID " + productId + " não encontrado.", "Erro de Busca", JOptionPane.ERROR_MESSAGE);
+            // Exibe uma mensagem de erro se o cliente não for encontrado.
+            JOptionPane.showMessageDialog(this, "Erro: Produto com ID " + clientId + " não encontrado.", "Erro de Busca", JOptionPane.ERROR_MESSAGE);
         }
         
         } catch (ClassCastException e) {
+            // Tratamento de erro para quando o valor da célula não é um inteiro.
             JOptionPane.showMessageDialog(this, "Erro interno: ID da tabela não é um número válido. " + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         } catch (RuntimeException e) {
+            // Tratamento de erros de persistência (ex: falha de conexão com o banco).
             JOptionPane.showMessageDialog(this, "Erro ao buscar produto: " + e.getMessage(), "Erro de Persistência", JOptionPane.ERROR_MESSAGE);
         }
     }
     
+    //Remove o cliente selecionado após confirmação do usuário.
     private void removeClient(int rowIndex){
     
+        // Obtém o ID do cliente da coluna 2.
         int clientId = (int) tCliente.getValueAt(rowIndex, 2); 
+        
+        // Solicita confirmação ao usuário.
         int confirm = JOptionPane.showConfirmDialog(this, 
         "Tem certeza que deseja remover o cliente ID " + clientId + "?", 
         "Confirmação", JOptionPane.YES_NO_OPTION);
 
         if (confirm == JOptionPane.YES_OPTION) {
             try {
+                // Chama o controlador para realizar a exclusão.
                 clientController.deleteClient(clientId); 
-                loadClients();
+                loadClients();// Recarrega a lista para atualizar a tabela.
                 JOptionPane.showMessageDialog(this, "Cliente removido com sucesso!");
             } catch (Exception e) {
+                // Tratamento de erros durante o processo de remoção.
                 JOptionPane.showMessageDialog(this, "Erro ao remover: " + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
             } 
         }
@@ -210,7 +233,7 @@ public class ClientListView extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnFiltrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFiltrarActionPerformed
-        filterProducts();
+        filterClients();
     }//GEN-LAST:event_btnFiltrarActionPerformed
 
     private void btnNovoClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNovoClienteActionPerformed
@@ -242,7 +265,10 @@ public class ClientListView extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(() -> new ClientListView().setVisible(true));
     }
     
-    private void filterProducts() {
+    /**
+     * Realiza a filtragem dos clientes com base nos campos de filtro da tela.
+     */
+    private void filterClients() {
         
         int codFilter = 0;
              
@@ -262,12 +288,18 @@ public class ClientListView extends javax.swing.JFrame {
         
     }
     
+    /**
+     * Carrega todos os clientes e preenche a tabela.
+     */
     private void loadClients() {
        
         createTable(clientController.findAll());
                 
     } 
     
+    /**
+     * Preenche a JTable com a lista de objetos Client fornecida.
+     */
     private void createTable(List<Client> listClients){
     
         DefaultTableModel modelo = (DefaultTableModel) tCliente.getModel();
@@ -286,7 +318,9 @@ public class ClientListView extends javax.swing.JFrame {
         } 
     }
     
-
+    /**
+     * Aplica um estilo visual personalizado aos componentes da tela (cores, bordas).
+     */
     private void aplicarEstilo() {
 
         getContentPane().setBackground(new Color(250, 245, 235)); 
@@ -314,6 +348,9 @@ public class ClientListView extends javax.swing.JFrame {
         tCliente.setGridColor(new Color(220, 210, 200));
     }
     
+    /**
+     * Aplica um estilo padrão e efeitos de hover a um JButton.
+     */
     private void estilizarBotao(JButton botao) {
         Color corNormal = new Color(180, 150, 120);
         Color corHover = new Color(160, 130, 100);

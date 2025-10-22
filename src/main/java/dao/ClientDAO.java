@@ -4,10 +4,7 @@
  */
 package dao;
 
-/**
- *
- * @author Daniel Coelho
- */
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -16,6 +13,10 @@ import model.Client;
 
 public class ClientDAO extends AbstractDAO<Client, Integer> {
 
+    /**
+     * Insere um novo cliente no banco de dados e retorna o ID gerado.
+     *
+     */
     @Override
     public Integer save(Client client) {
         String sql = "INSERT INTO client (name, cpf, phone, total_points) VALUES (?, ?, ?, ?)";
@@ -30,6 +31,10 @@ public class ClientDAO extends AbstractDAO<Client, Integer> {
         return generatedId;
     }
 
+    /**
+     * Busca um cliente no banco de dados com base no seu identificador.
+     *
+     */
     @Override
     public Client findById(Integer id) {
         String sql = "SELECT * FROM client WHERE id = ?";
@@ -42,6 +47,10 @@ public class ClientDAO extends AbstractDAO<Client, Integer> {
         }, "ClientDAO", "findById");
     }
 
+    /**
+     * Retorna todos os clientes cadastrados no banco de dados, ordenados por ID.
+     *
+     */
     @Override
     public List<Client> findAll() {
         String sql = "SELECT * FROM client ORDER BY id";
@@ -55,6 +64,10 @@ public class ClientDAO extends AbstractDAO<Client, Integer> {
         }, "ClientDAO", "findAll");
     }
 
+    /**
+     * Atualiza os dados de um cliente existente com base em seu ID.
+     *
+     */
     @Override
     public void update(Client client, Integer id) {
         String sql = "UPDATE client SET name = ?, cpf = ?, phone = ?, total_points = ? WHERE id = ?";
@@ -68,6 +81,10 @@ public class ClientDAO extends AbstractDAO<Client, Integer> {
         }, "ClientDAO", "update");
     }
 
+    /**
+     * Exclui um cliente do banco de dados com base no ID informado.
+     *
+     */
     @Override
     public void delete(Integer id) {
         String sql = "DELETE FROM client WHERE id = ?";
@@ -84,6 +101,7 @@ public class ClientDAO extends AbstractDAO<Client, Integer> {
         return client;
     }
 
+    //Filtra clientes de forma dinâmica com base em parâmetros opcionais (ID, nome e CPF).
     public List<Client> filter(int id, String name, String cpf) {
         List<Object> parameters = new ArrayList<>();
         StringBuilder sql = new StringBuilder("SELECT * FROM client WHERE 1=1");
@@ -119,6 +137,10 @@ public class ClientDAO extends AbstractDAO<Client, Integer> {
         }, "ClientDAO", "filter");
     }
     
+    /**
+     * Atualiza apenas o total de pontos de um cliente específico.
+     *
+     */
     public void updateTotalPoints(Client client) {
     String sql = "UPDATE client SET total_points = ? WHERE id = ?";
     executeUpdate(sql, stmt -> {

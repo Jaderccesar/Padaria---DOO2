@@ -16,8 +16,9 @@ import model.Product;
 import model.Sell;
 
 /**
- *
- * @author Usuario
+ * Janela para exibir produtos relacionados a uma venda específica.
+ * Permite visualizar e editar os produtos que compõem a venda.
+ * 
  */
 public class SellProductsView extends javax.swing.JFrame {
 
@@ -26,6 +27,10 @@ public class SellProductsView extends javax.swing.JFrame {
     private final ProductController productController = new ProductController();
     private int sellId;
     
+    /**
+     * Construtor da classe, recebe o ID da venda para carregar os produtos.
+     * 
+     */
      public SellProductsView(int sellId) {
         initComponents();
         this.sellId = sellId; 
@@ -48,6 +53,10 @@ public class SellProductsView extends javax.swing.JFrame {
     }
     
     
+     /**
+     * Método que abre a janela de edição de produto, a partir da linha selecionada.
+     * 
+     */
       private void editProduct(int rowIndex) {
         try {
             int productId = (int) tProducts.getValueAt(rowIndex, 1);
@@ -141,7 +150,7 @@ public class SellProductsView extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     /**
-     * @param args the command line arguments
+     * Método para carregar produtos relacionados à venda e preencher a tabela.
      */
     private void loadProducts() {
         try {
@@ -153,6 +162,10 @@ public class SellProductsView extends javax.swing.JFrame {
         }
     }
 
+    /**
+     * Método que popula a tabela com os produtos recebidos.
+     * 
+     */
     private void createTable(List<Product> listProducts) {
         DefaultTableModel modelo = (DefaultTableModel) tProducts.getModel();
         modelo.setRowCount(0);
@@ -168,6 +181,9 @@ public class SellProductsView extends javax.swing.JFrame {
         }
     }
     
+    /**
+     * Aplica estilos visuais personalizados à interface.
+     */
     private void aplicarEstilo() {
 
         getContentPane().setBackground(new Color(250, 245, 235));

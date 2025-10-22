@@ -10,16 +10,23 @@ import java.awt.*;
 import javax.swing.*;
 
 /**
+ * **LoginView.java**
+ * Esta classe representa a tela de login da aplicação.
+ * Ela coleta o nome de usuário e senha, e interage com o LoginController
+ * para realizar a autenticação.
  *
- * @author User
  */
 public class LoginView extends javax.swing.JFrame {
     
+    // Logger para registro de eventos e erros.
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(LoginView.class.getName());
+    
+    // Instância do controlador para processar a lógica de autenticação.
     private final LoginController loginController = new LoginController();
 
     /**
-     * Creates new form LoginView
+     * Construtor padrão.
+     * Inicializa os componentes e aplica o estilo visual.
      */
     public LoginView() {
         initComponents();
@@ -75,7 +82,7 @@ public class LoginView extends javax.swing.JFrame {
         });
         jPanel1.add(BtnLogin, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 390, -1, -1));
 
-        jLabel1.setIcon(new javax.swing.ImageIcon("C:\\Users\\Acer\\Downloads\\20251019_1048_Padaria SVF_remix_01k7ybk026efq855tq9y4azg39.png")); // NOI18N
+        jLabel1.setIcon(new javax.swing.ImageIcon("C:\\Users\\User\\Downloads\\20251019_1048_Padaria SVF_remix_01k7ybk026efq855tq9y4azg39.png")); // NOI18N
         jLabel1.setText("jLabel1");
         jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1020, 820));
 
@@ -108,6 +115,12 @@ public class LoginView extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_tfUserNameActionPerformed
 
+    /**
+     * Implementa a lógica de autenticação do usuário.
+     * 1. Coleta e valida os dados de entrada.
+     * 2. Chama o LoginController para autenticar.
+     * 3. Navega para a HomeView em caso de sucesso ou mostra erro.
+     */
     private void realizarLogin() {
         String username = tfUserName.getText().trim();
         String password = new String(pfSenha.getPassword());
@@ -129,6 +142,9 @@ public class LoginView extends javax.swing.JFrame {
         }
     }
 
+    /**
+     * Aplica um estilo visual personalizado aos componentes.
+     */
     private void aplicarEstilo() {
         jPanel1.setBackground(new Color(250, 245, 235)); 
         
@@ -153,6 +169,9 @@ public class LoginView extends javax.swing.JFrame {
         estilizarBotao(BtnLogin);
     }
 
+    /**
+     * Aplica um estilo padrão e efeitos de hover a um JButton.
+     */
     private void estilizarBotao(JButton botao) {
         Color corNormal = new Color(180, 150, 120);
         Color corHover = new Color(160, 130, 100);

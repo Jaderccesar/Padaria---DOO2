@@ -16,9 +16,10 @@ import javax.swing.table.DefaultTableModel;
 import model.Product;
 
 /**
+ * **ProductListView.java**
+ * Esta classe representa a tela de listagem de produtos. 
+ * Permite visualizar, filtrar, adicionar, editar e remover produtos.
  *
- * @author Daniel Coelho - PAD 1 e 2 - New - "Adicionado o CRUD de um PRODUTO" -
- * Sprint 1
  */
 public class ProductListView extends javax.swing.JFrame {
 
@@ -26,7 +27,8 @@ public class ProductListView extends javax.swing.JFrame {
     private final ProductController productController = new ProductController();
 
     /**
-     * Creates new form ProductListView
+     * Construtor padrão da classe ProductListView.
+     * Inicializa componentes, aplica estilo e carrega os produtos na tabela.
      */
     public ProductListView() {
         initComponents();
@@ -49,6 +51,9 @@ public class ProductListView extends javax.swing.JFrame {
         });
     }
 
+    /**
+     * Abre a tela de edição (ProductView) com os dados do produto selecionado.
+     */
     private void editProduct(int rowIndex) {
 
         try {
@@ -70,6 +75,9 @@ public class ProductListView extends javax.swing.JFrame {
         }
     }
     
+    /**
+     * Remove o produto selecionado da lista após confirmação.
+     */
     private void removeProduct(int rowIndex){
         int productId = (int) tProduto.getValueAt(rowIndex, 2); 
         int confirm = JOptionPane.showConfirmDialog(this, 
@@ -247,14 +255,15 @@ public class ProductListView extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
-     * @param args the command line arguments
+     * Carrega todos os produtos disponíveis e preenche a tabela.
      */
     private void loadProducts() {
-
         createTable(productController.findAll());
-
     }
 
+    /**
+     * Filtra os produtos com base nos campos de filtro preenchidos na tela.
+     */
     private void filterProducts() {
 
         String tipoSelecionado = (String) cmbTipo.getSelectedItem();
@@ -280,6 +289,9 @@ public class ProductListView extends javax.swing.JFrame {
 
     }
 
+    /**
+     * Preenche a JTable com a lista de objetos Product.
+     */
     private void createTable(List<Product> listProducts) {
 
         DefaultTableModel modelo = (DefaultTableModel) tProduto.getModel();
@@ -299,6 +311,9 @@ public class ProductListView extends javax.swing.JFrame {
         }
     }
     
+    /**
+     * Aplica o estilo visual personalizado aos componentes.
+     */
     private void aplicarEstilo() {
 
         getContentPane().setBackground(new Color(250, 245, 235)); 
@@ -329,6 +344,9 @@ public class ProductListView extends javax.swing.JFrame {
         tProduto.setRowHeight(25);
     }
 
+    /**
+     * Aplica um estilo padrão e efeitos de hover a um JButton.
+     */
     private void estilizarBotao(JButton botao) {
         Color corNormal = new Color(180, 150, 120);
         Color corHover = new Color(160, 130, 100);

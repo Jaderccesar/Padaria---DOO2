@@ -14,16 +14,17 @@ import javax.swing.JOptionPane;
 import model.Product;
 
 /**
- *
- * @author Daniel Coelho - PAD 1 e 2 - New - "Adicionado o CRUD de um PRODUTO" - Sprint 1
+ * **ProductView.java**
+ * Esta classe representa a tela para Adicionar (Create) ou Editar (Update) um produto.
  */
 public class ProductView extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(ProductView.class.getName());
     private final ProductController productController = new ProductController();
     private Product currentProduct;
+    
     /**
-     * Creates new form ProductView
+     * Construtor para Novo Produto (CREATE).
      */
     public ProductView() {
         initComponents();
@@ -31,6 +32,9 @@ public class ProductView extends javax.swing.JFrame {
         aplicarEstilo();
     }
     
+    /**
+     * Construtor para Editar Produto (UPDATE).
+     */
     public ProductView(Product productToEdit) {
         initComponents();
 
@@ -224,7 +228,7 @@ public class ProductView extends javax.swing.JFrame {
         this.dispose();  
     }//GEN-LAST:event_btnVoltarActionPerformed
 
-
+    // --- Estilização e Aparência ---
     private void aplicarEstilo() {
 
         jPanel1.setBackground(new Color(250, 245, 235)); 

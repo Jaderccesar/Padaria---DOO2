@@ -18,9 +18,16 @@ import util.ConnectionFactory;
  */
 public abstract class AbstractDAO<T, ID> implements GenericDAO<T, ID> {
     
+    /** Responsável por salvar logs de erro e operações executadas. */
     private final LoggerDAO logger = new LoggerDAO();
+    
+    /** Usuário responsável pelas operações realizadas (padrão: "admin"). */
     private final String usuario = "admin";
     
+    /**
+     * Executa um comando SQL de INSERT e retorna o ID gerado automaticamente.
+     *
+     */
     protected Integer executeInsert(String sql, SQLConsumer<PreparedStatement> consumer, String classe, String metodo) {
         
         Integer generatedId = null;
@@ -43,6 +50,11 @@ public abstract class AbstractDAO<T, ID> implements GenericDAO<T, ID> {
 
         return generatedId; 
     }
+    
+    /**
+     * Executa um comando SQL de UPDATE no banco de dados.
+     *
+     */
     protected void executeUpdate(String sql, SQLConsumer<PreparedStatement> consumer, String classe, String metodo) {
         try (Connection con = ConnectionFactory.getConnection();
              PreparedStatement stmt = con.prepareStatement(sql)) {
@@ -56,6 +68,10 @@ public abstract class AbstractDAO<T, ID> implements GenericDAO<T, ID> {
         }
     }
 
+     /**
+     * Executa uma consulta SQL e retorna um único resultado mapeado.
+     *
+     */
     protected <R> R executeQuerySingle(String sql, SQLConsumer<PreparedStatement> consumer,
                                        SQLFunction<ResultSet, R> mapper, String classe, String metodo) {
         try (Connection con = ConnectionFactory.getConnection();
@@ -72,6 +88,7 @@ public abstract class AbstractDAO<T, ID> implements GenericDAO<T, ID> {
         }
     }
 
+    //Executa uma consulta SQL genérica e retorna o resultado mapeado.
     protected <R> R executeQuery(String sql, SQLConsumer<PreparedStatement> consumer,
                                  SQLFunction<ResultSet, R> mapper, String classe, String metodo) {
         return executeQuerySingle(sql, consumer, mapper, classe, metodo);
@@ -87,6 +104,11 @@ public abstract class AbstractDAO<T, ID> implements GenericDAO<T, ID> {
         R apply(T t) throws SQLException;
     }
     
+    /**
+     * Define dinamicamente o tipo correto de parâmetro no PreparedStatement,
+     * conforme o tipo do objeto passado.
+     *
+     */
      protected void setStatementParameter(PreparedStatement stmt, int index, Object param) throws SQLException {
    
         switch (param) {
@@ -98,7 +120,6 @@ public abstract class AbstractDAO<T, ID> implements GenericDAO<T, ID> {
             case null, default -> {
                 stmt.setObject(index, param);
             }
-    }
-}   
-
+        }
+    }   
 }

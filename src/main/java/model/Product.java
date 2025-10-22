@@ -4,10 +4,6 @@
  */
 package model;
 
-/**
- *
- * @author Daniel Coelho PAD 1 e 2 - New - "Adicionado o CRUD de um PRODUTO" - Sprint 1
- */
 public class Product {
     
     private int id;
@@ -18,10 +14,12 @@ public class Product {
     private int pointCost;
     private int soldQuantity;
     
+    //Construtor padrão (sem parâmetros).
     public Product(){
     
     }
     
+    //Construtor com parâmetros principais.
     public Product(String name, double price, String type, int stockQuantity, int pointCost) {
         this.name = name;
         this.price = price;
@@ -29,6 +27,10 @@ public class Product {
         this.stockQuantity = stockQuantity; 
         this.pointCost = pointCost;
     }
+    
+    // ---------------------------
+    // Métodos Setters
+    // ---------------------------
     
     public void setId(int id) {
         this.id = id;

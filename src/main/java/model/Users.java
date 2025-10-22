@@ -6,8 +6,10 @@ public class Users {
     private String password;
     private boolean isAdmin;
 
+    //Construtor padrão.
     public Users() {}
 
+    //Construtor parametrizado.
     public Users(Integer id, String username, String password, boolean isAdmin) {
         this.id = id;
         this.username = username;
@@ -15,6 +17,8 @@ public class Users {
         this.isAdmin = isAdmin;
     }
 
+    // ------------------ Getters e Setters ------------------
+    
     public Integer getId() { return id; }
     public void setId(Integer id) { this.id = id; }
 

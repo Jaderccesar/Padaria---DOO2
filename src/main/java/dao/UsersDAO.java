@@ -10,16 +10,16 @@ import java.util.ArrayList;
 import java.util.List;
 import model.Users;
 
-/**
- *
- * @author Daniel Coelho
- */
 public class UsersDAO extends AbstractDAO<Users, Integer> {
 
+    /**
+     * Salva um novo usuário no banco de dados.
+     */
     @Override
     public Integer save(Users user) {
         String sql = "INSERT INTO users (username, password, is_admin) VALUES (?, ?, ?)";
 
+        // Executa o insert usando o método genérico do AbstractDAO
         Integer generatedId = executeInsert(sql, stmt -> {
             stmt.setString(1, user.getUsername());
             stmt.setString(2, user.getPassword());
@@ -29,6 +29,9 @@ public class UsersDAO extends AbstractDAO<Users, Integer> {
         return generatedId;
     }
 
+    /**
+     * Busca um usuário pelo seu ID.
+     */
     @Override
     public Users findById(Integer id) {
         String sql = "SELECT * FROM users WHERE id = ?";
@@ -41,6 +44,9 @@ public class UsersDAO extends AbstractDAO<Users, Integer> {
         }, "UserDAO", "findById");
     }
 
+    /**
+     * Retorna todos os usuários cadastrados no banco.
+     */
     @Override
     public List<Users> findAll() {
         String sql = "SELECT * FROM users ORDER BY id";
@@ -54,6 +60,9 @@ public class UsersDAO extends AbstractDAO<Users, Integer> {
         }, "UserDAO", "findAll");
     }
 
+    /**
+     * Atualiza os dados de um usuário existente.
+     */
     @Override
     public void update(Users user, Integer id) {
         String sql = "UPDATE users SET username = ?, password = ?, is_admin = ? WHERE id = ?";
@@ -66,12 +75,18 @@ public class UsersDAO extends AbstractDAO<Users, Integer> {
         }, "UserDAO", "update");
     }
 
+    /**
+     * Remove um usuário pelo ID.
+     */
     @Override
     public void delete(Integer id) {
         String sql = "DELETE FROM users WHERE id = ?";
         executeUpdate(sql, stmt -> stmt.setInt(1, id), "UserDAO", "delete");
     }
 
+    /**
+     * Mapeia os dados de um ResultSet para um objeto Users.
+     */
     private Users mapResultSetToUser(ResultSet rs) throws SQLException {
         Users user = new Users();
         user.setId(rs.getInt("id"));
@@ -81,6 +96,9 @@ public class UsersDAO extends AbstractDAO<Users, Integer> {
         return user;
     }
 
+    /**
+     * Busca um usuário pelo username e password para autenticação.
+     */
     public Users findByUsernameAndPassword(String username, String password) {
         String sql = "SELECT * FROM users WHERE username = ? AND password = ?";
 

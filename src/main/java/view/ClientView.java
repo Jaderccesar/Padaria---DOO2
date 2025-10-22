@@ -14,16 +14,26 @@ import javax.swing.JOptionPane;
 import model.Client;
 
 /**
+ * **ClientView.java**
+ * Esta classe representa a tela (JFrame) de cadastro ou edição de um único cliente.
+ * Ela é responsável por coletar os dados do cliente e interagir com o ClientController
+ * para salvar ou atualizar a informação.
  *
- * @author Daniel Coelho
  */
 public class ClientView extends javax.swing.JFrame {
     
+    // Logger para fins de depuração e registro de erros.
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(ClientView.class.getName());
+    
+    // Instância do controlador para interagir com a lógica de negócio dos clientes.
     private final ClientController clientController = new ClientController();
+    
+    // Armazena o cliente atual se estiver em modo de edição.
     private Client currentClient;
+    
     /**
-     * Creates new form ClientView
+     * Construtor padrão: Usado para criar um Novo Cliente
+     * Inicializa a tela em modo de cadastro.
      */
     public ClientView() {
         initComponents();
@@ -31,6 +41,7 @@ public class ClientView extends javax.swing.JFrame {
         aplicarEstilo();
     }
     
+    //Construtor de edição: Usado para Editar um Cliente existente.
     public ClientView(Client clientToEdit) {
         initComponents();
 
@@ -224,7 +235,9 @@ public class ClientView extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_jButton2ActionPerformed
 
-    
+    /**
+     * Aplica um estilo visual personalizado aos componentes da tela (cores, bordas).
+     */
     private void aplicarEstilo() {
 
         jPanel1.setBackground(new Color(250, 245, 235)); 
@@ -250,6 +263,9 @@ public class ClientView extends javax.swing.JFrame {
         estilizarBotao(jButton2);
     }
 
+    /**
+     * Aplica um estilo padrão e efeitos de hover a um JButton.
+     */
     private void estilizarBotao(JButton botao) {
         Color corNormal = new Color(180, 150, 120);
         Color corHover = new Color(160, 130, 100);

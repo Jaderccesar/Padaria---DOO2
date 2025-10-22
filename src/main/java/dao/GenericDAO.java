@@ -6,15 +6,20 @@ package dao;
 
 import java.util.List;
 
-/**
- *
- * @author Usuario
- */
 public interface GenericDAO<T, ID> {
     
+    //Insere uma nova entidade no banco de dados.
     ID save(T entity);
+    
+    //Busca uma entidade no banco de dados com base no seu identificador.
     T findById(ID id);
+    
+    //Retorna uma lista contendo todas as entidades cadastradas.
     List<T> findAll();
+    
+    //Atualiza as informações de uma entidade existente no banco de dados.
     void update(T entity, ID id);
+    
+    //Remove uma entidade do banco de dados com base em seu identificador.
     void delete(ID id);
 }

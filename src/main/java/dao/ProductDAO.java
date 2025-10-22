@@ -16,6 +16,10 @@ import model.Product;
  */
 public class ProductDAO extends AbstractDAO<Product, Integer> {
     
+    /**
+     * Insere um novo produto no banco de dados.
+     *
+     */
     @Override
     public Integer save(Product product) {
         String sql = "INSERT INTO product (name, price, type, stock_quantity, point_cost) VALUES (?, ?, ?, ?, ?)";
@@ -31,6 +35,10 @@ public class ProductDAO extends AbstractDAO<Product, Integer> {
         return generatedId;
     }
 
+    /**
+     * Busca um produto no banco de dados a partir do seu ID.
+     *
+     */
     @Override
     public Product findById(Integer id) {
         String sql = "SELECT * FROM product WHERE id = ?";
@@ -42,6 +50,9 @@ public class ProductDAO extends AbstractDAO<Product, Integer> {
         }, "ProductDAO", "findById");
     }
 
+    /**
+     * Retorna todos os produtos cadastrados no banco de dados.
+     */
     @Override
     public List<Product> findAll() {
         String sql = "SELECT * FROM product ORDER BY id";
@@ -54,6 +65,10 @@ public class ProductDAO extends AbstractDAO<Product, Integer> {
         }, "ProductDAO", "findAll");
     }
 
+    /**
+     * Atualiza os dados de um produto existente no banco de dados.
+     *
+     */
     @Override
     public void update(Product product, Integer id) {
         String sql = "UPDATE product SET name = ?, price = ?, type = ?, stock_quantity = ?, point_cost = ? WHERE id = ?";
@@ -67,12 +82,20 @@ public class ProductDAO extends AbstractDAO<Product, Integer> {
         }, "ProductDAO", "update");
     }
 
+    /**
+     * Remove um produto do banco de dados com base em seu ID.
+     *
+     */
     @Override
     public void delete(Integer id) {
         String sql = "DELETE FROM product WHERE id = ?";
         executeUpdate(sql, stmt -> stmt.setInt(1, id), "ProductDAO", "delete");
     }
 
+    /**
+     * Mapeia os dados retornados do banco (ResultSet) para um objeto Product.
+     *
+     */
     private Product mapResultSetToProduct(ResultSet rs) throws SQLException {
     
         Product product = new Product();  
@@ -87,6 +110,12 @@ public class ProductDAO extends AbstractDAO<Product, Integer> {
         return product;  
     }
     
+    /**
+     * Filtra produtos com base em critérios opcionais: ID, nome e tipo.
+     *
+     * Usa SQL dinâmico para montar a consulta de acordo com os parâmetros informados.
+     *
+     */
     public List<Product> filter(int id, String name, String type) {
     
         List<Object> parameters = new ArrayList<>();
@@ -126,6 +155,10 @@ public class ProductDAO extends AbstractDAO<Product, Integer> {
         }, "ProductDAO", "filter");
     }
     
+    /**
+     * Atualiza o estoque de um produto subtraindo a quantidade vendida.
+     *
+     */
     public void updateStock(int productId, int quantitySold) {
         System.out.println("no dao"+quantitySold);
         String sql = "UPDATE product SET stock_quantity = stock_quantity - ? WHERE id = ?";
